@@ -39,8 +39,8 @@ describe("EventManager", async () => {
       const transaction = await eventManagerContract.createEvent(cid, ticketsTotal, toDate, { value: ethers.utils.parseEther("0.1") });
 
       // then
-      expect(transaction).to.emit(eventManagerContract, 'EventCreated')
-          .withArgs(requestor.address, 0);
+      await expect(transaction).to.emit(eventManagerContract, 'EventCreated')
+          .withArgs(requestor.address, toDate);
 
       const event = await eventManagerContract.events(requestor.address, 0);
       expect(event.cid).to.be.equal(cid);
