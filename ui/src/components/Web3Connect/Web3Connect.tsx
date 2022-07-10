@@ -1,7 +1,8 @@
-import React, { useCallback, useEffect, useRef, useState } from "react"
+import React, { useCallback, useContext, useEffect, useRef } from "react"
 import { Badge, Button, HStack } from "@chakra-ui/react"
 import { providers } from "ethers"
 import Web3Modal from "web3modal"
+import { Web3Context } from "../../contexts/Web3Context"
 
 const providerOptions = {
   /* See Provider Options Section */
@@ -9,13 +10,10 @@ const providerOptions = {
 
 export const Web3Connect = () => {
   const modalRef = useRef<Web3Modal>()
-  const [_, setProvider] = useState<providers.Web3Provider>()
-  const [account, setAccount] = useState<String>()
+  const { account, setAccount, setProvider } = useContext(Web3Context)
 
   useEffect(() => {
     modalRef.current = new Web3Modal({
-      network: "mainnet", // optional
-      cacheProvider: true, // optional
       providerOptions, // required
     })
   }, [])
@@ -29,8 +27,8 @@ export const Web3Connect = () => {
     setProvider(provider)
     setAccount((await provider.listAccounts())[0])
 
-    provider.on("accountsChanged", onAccountChange)
-    provider.on("disconnect", onDisconnect)
+    instance.on("accountsChanged", onAccountChange)
+    instance.on("disconnect", onDisconnect)
   }, [])
 
   const onAccountChange = useCallback((accounts: string[]) => {
