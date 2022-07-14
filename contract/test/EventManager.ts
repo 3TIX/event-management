@@ -42,14 +42,9 @@ describe("EventManager", async () => {
             const transaction = await eventManagerContract.createEvent(eventName, imageURI, cid, ticketsTotal, toDate, {value: ethers.utils.parseEther("0.1")});
 
             // then
-            await expect(transaction).to.emit(eventManagerContract, 'EventCreated');
-
             const eventAddress = await eventManagerContract.createdEvents(0);
-            const receipt = await transaction.wait();
-            const emittedEventAddress = receipt.events?.filter((x) => {
-                return x.event == "EventCreated"
-            })[0].args?.[0]
-            expect(eventAddress).to.be.equal(emittedEventAddress);
+            await expect(transaction).to.emit(eventManagerContract, 'EventCreated')
+                .withArgs(eventAddress);
 
             const eventContract = await ethers.getContractAt("EventNFT", eventAddress) as EventNFT;
             expect(await eventContract.eventOwner()).to.be.equal(requestor.address);
