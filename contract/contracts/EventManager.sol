@@ -1,19 +1,17 @@
 pragma solidity ^0.8.0;
 
-contract EventManager {
+import "@openzeppelin/contracts/utils/Strings.sol";
 
-    struct Event {
-        bytes cid;
-        uint16 ticketsTotal;
-        uint256 endDate;
-    }
+import "./EventNFT.sol";
+
+contract EventManager {
 
     uint256 constant public fee = 10 ** 17;
 
-    mapping(address => Event[]) public events;
+    address[] public createdEvents;
     address payable public owner;
 
-    event EventCreated(address eventCreator, uint256 index);
+    event EventCreated(address eventAddress);
 
     constructor() {
         owner = payable(msg.sender);
@@ -24,14 +22,16 @@ contract EventManager {
         owner.transfer(address(this).balance);
     }
 
-    function createEvent(bytes calldata cid, uint16 ticketsTotal, uint256 endDate) public payable {
+    function createEvent(string calldata eventName, string calldata imageURI, bytes calldata cid, uint16 ticketsTotal, uint256 endDate) public payable {
         require(msg.value >= fee, "too small fee");
-        Event memory newEvent;
-        newEvent.cid = cid;
-        newEvent.ticketsTotal = ticketsTotal;
-        newEvent.endDate = endDate;
-        events[msg.sender].push(newEvent);
+        EventNFT newEvent = new EventNFT(msg.sender, eventName, string.concat("EVNT", Strings.toString(createdEvents.length + 1)), imageURI, ticketsTotal, cid, endDate);
+        createdEvents.push(address(newEvent));
+        emit EventCreated(address(newEvent));
+    }
 
-        emit EventCreated(msg.sender, endDate);
+    function buyTicket(address eventAddress) public payable returns (uint16) {
+        // TODO check ticket price against sent amount
+        EventNFT eventNftContract = EventNFT(eventAddress);
+        return eventNftContract.mintToken(msg.sender);
     }
 }
