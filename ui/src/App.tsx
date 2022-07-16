@@ -1,12 +1,13 @@
 import * as React from "react"
-import { ChakraProvider, theme } from "@chakra-ui/react"
-import { Main } from "./components/Main"
+import { ChakraProvider } from "@chakra-ui/react"
 import { Web3ContextProvider } from "./contexts/Web3Context"
+import { theme } from "./theme"
+import { CreateTickets } from "./pages/CreateTickets"
 
 export const App = () => (
   <ChakraProvider theme={theme}>
     <Web3ContextProvider>
-      <Main />
+      <CreateTickets />
     </Web3ContextProvider>
   </ChakraProvider>
 )
