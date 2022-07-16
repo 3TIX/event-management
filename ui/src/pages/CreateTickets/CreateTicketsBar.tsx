@@ -9,7 +9,14 @@ import {
 } from "@chakra-ui/react"
 import { RocketTicket } from "../../components/Icon"
 
-export const CreateTicketsBar = (props: BoxProps) => {
+type CreateTicketsBarProps = {
+  onCreate: () => void
+}
+
+export const CreateTicketsBar = ({
+  onCreate,
+  ...props
+}: BoxProps & CreateTicketsBarProps) => {
   return (
     <Box bgColor="primary.20" borderRadius="100px" padding={2} {...props}>
       <Flex>
@@ -50,6 +57,7 @@ export const CreateTicketsBar = (props: BoxProps) => {
           />
         </HStack>
         <Button
+          onClick={onCreate}
           colorScheme="primary"
           color="black"
           borderRadius="100px"

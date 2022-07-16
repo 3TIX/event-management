@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useEffect, useRef } from "react"
-import { Button, HStack } from "@chakra-ui/react"
+import { Button, ButtonProps } from "@chakra-ui/react"
 import { providers } from "ethers"
 import Web3Modal from "web3modal"
 import { Web3Context } from "../../contexts/Web3Context"
@@ -8,7 +8,7 @@ const providerOptions = {
   /* See Provider Options Section */
 }
 
-export const Web3Connect = () => {
+export const Web3Connect = ({ ...props }: ButtonProps) => {
   const modalRef = useRef<Web3Modal>()
   const { account, setAccount, setProvider } = useContext(Web3Context)
 
@@ -56,29 +56,27 @@ export const Web3Connect = () => {
     setAccount(undefined)
   }, [setAccount, setProvider])
 
-  return (
-    <HStack>
-      {!account ? (
-        <Button
-          variant="outline"
-          color="primary"
-          colorScheme="primary"
-          borderRadius="100px"
-          onClick={onConnectClick}
-        >
-          Connect wallet
-        </Button>
-      ) : (
-        <Button
-          variant="outline"
-          color="primary"
-          colorScheme="primary"
-          borderRadius="100px"
-          onClick={onDisconnectClick}
-        >
-          Disconnect wallet
-        </Button>
-      )}
-    </HStack>
+  return !account ? (
+    <Button
+      variant="outline"
+      color="primary"
+      colorScheme="primary"
+      borderRadius="100px"
+      onClick={onConnectClick}
+      {...props}
+    >
+      Connect wallet
+    </Button>
+  ) : (
+    <Button
+      variant="outline"
+      color="primary"
+      colorScheme="primary"
+      borderRadius="100px"
+      onClick={onDisconnectClick}
+      {...props}
+    >
+      Disconnect wallet
+    </Button>
   )
 }
