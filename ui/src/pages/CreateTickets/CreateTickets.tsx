@@ -8,14 +8,18 @@ import {
   Container,
   Spacer,
   Button,
+  useDisclosure,
 } from "@chakra-ui/react"
 import { QRTicket } from "./QRTicket"
 import { CreateTicketsBar } from "./CreateTicketsBar"
+import { TicketCreateMaster } from "../../components/TicketCreateMaster"
 
 export const CreateTickets = () => {
+  const { isOpen, onOpen, onClose } = useDisclosure()
   return (
     <>
       <FixedPageBackground />
+      <TicketCreateMaster isOpen={isOpen} onClose={onClose} />
       <Header />
       <Container maxW="container.xl" mt={36}>
         <Flex px={40} paddingX={4}>
@@ -29,7 +33,7 @@ export const CreateTickets = () => {
             </Text>
             <Button variant="link">Learn more {">"}</Button>
             <Spacer flex={0.5} />
-            <CreateTicketsBar />
+            <CreateTicketsBar onCreate={onOpen} />
           </VStack>
           <Spacer />
           <QRTicket />
