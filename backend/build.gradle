@@ -1,0 +1,60 @@
+plugins {
+    id "java"
+    id "idea"
+    id "org.unbroken-dome.test-sets" version "4.0.0"
+    id "com.github.johnrengelman.shadow" version "7.1.2"
+}
+
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
+
+testSets {
+    testFunctional
+}
+check.dependsOn testFunctional
+testFunctional.mustRunAfter test
+
+dependencies {
+    implementation "ch.qos.logback:logback-core:$logbackVersion"
+    implementation "ch.qos.logback:logback-classic:$logbackVersion"
+    implementation "org.slf4j:slf4j-api:$slf4JVersion"
+
+    implementation "io.javalin:javalin:$javalinVersion"
+
+    implementation "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jdk8:$jacksonVersion"
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonVersion"
+
+    testImplementation "org.apache.commons:commons-lang3:$commonsLang3Version"
+    testImplementation "org.assertj:assertj-core:$assertjVersion"
+
+    testImplementation "org.junit.jupiter:junit-jupiter-api:$junitVersion"
+    testImplementation "org.junit.jupiter:junit-jupiter-params:$junitVersion"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junitVersion"
+}
+
+tasks.withType(Test) {
+    useJUnitPlatform()
+}
+
+test {
+    useJUnitPlatform()
+}
+
+repositories {
+    mavenCentral()
+}
+
+wrapper {
+    gradleVersion = "7.5"
+}
+
+jar.enabled = false
+shadowJar {
+    archiveBaseName.set("hack-fs-app")
+    archiveClassifier.set("")
+    archiveVersion.set("")
+    mergeServiceFiles()
+
+    jar.manifest.attributes(["Main-Class": "io.github.hackfs2022.HackFsApp"])
+}
