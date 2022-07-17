@@ -1,7 +1,6 @@
 import {expect} from "chai";
 import {ethers} from "hardhat";
 import {EventManager, EventNFT} from "../typechain-types";
-import {address} from "hardhat/internal/core/config/config-validation";
 
 describe("EventManager", async () => {
     describe("Deployment", async () => {
@@ -74,7 +73,7 @@ describe("EventManager", async () => {
             const eventContract = await ethers.getContractAt("EventNFT", eventAddress) as EventNFT;
 
             // when
-            const transaction = await eventManagerContract.buyTicket(eventAddress);
+            await eventManagerContract.buyTicket(eventAddress);
 
             // then
             expect(await eventContract.mintedCount()).to.be.equal(1);
@@ -84,7 +83,6 @@ describe("EventManager", async () => {
             // given
             const contract = await ethers.getContractFactory("EventManager");
             const eventManagerContract = await contract.deploy() as EventManager;
-            const [requestor] = await ethers.getSigners();
 
             const cid = ethers.utils.hexlify(ethers.utils.toUtf8Bytes("QmZkMq9PCMPbzu54recZKjr54qm4gVJJ8TnRjqP7Q4SBsA"));
             const eventName = "some name";
@@ -99,5 +97,48 @@ describe("EventManager", async () => {
             await expect(eventManagerContract.buyTicket(eventAddress))
                 .revertedWith("all tickets sold out");
         })
+    });
+    describe("Claim QR", async () => {
+        it("Should successfully burn NFT and claim QR code", async () => {
+            // given
+            const contract = await ethers.getContractFactory("EventManager");
+            const eventManagerContract = await contract.deploy() as EventManager;
+            const cid = ethers.utils.hexlify(ethers.utils.toUtf8Bytes("QmZkMq9PCMPbzu54recZKjr54qm4gVJJ8TnRjqP7Q4SBsA"));
+            const eventName = "some name";
+            const imageURI = "someURI";
+            const ticketsTotal = 1;
+            const toDate = 123456;
+            const qrId = "someIdString";
+            await eventManagerContract.createEvent(eventName, imageURI, cid, ticketsTotal, toDate, {value: ethers.utils.parseEther("0.1")});
+            const eventAddress = await eventManagerContract.createdEvents(0);
+            await eventManagerContract.buyTicket(eventAddress);
+
+            // when
+            const transaction = await eventManagerContract.claimQrCode(eventAddress, 1, qrId);
+
+            // then
+            await expect(transaction).to.emit(eventManagerContract, 'QrCodeClaimed')
+                .withArgs(qrId);
+        });
+        it("Should not allow to burn NFT if not an owner", async () => {
+            // given
+            const contract = await ethers.getContractFactory("EventManager");
+            const eventManagerContract = await contract.deploy() as EventManager;
+            const cid = ethers.utils.hexlify(ethers.utils.toUtf8Bytes("QmZkMq9PCMPbzu54recZKjr54qm4gVJJ8TnRjqP7Q4SBsA"));
+            const eventName = "some name";
+            const imageURI = "someURI";
+            const ticketsTotal = 1;
+            const toDate = 123456;
+            const qrId = "someIdString";
+            await eventManagerContract.createEvent(eventName, imageURI, cid, ticketsTotal, toDate, {value: ethers.utils.parseEther("0.1")});
+            const eventAddress = await eventManagerContract.createdEvents(0);
+            await eventManagerContract.buyTicket(eventAddress);
+
+            const eventManagerContractFromAnotherSigner = eventManagerContract.connect((await ethers.getSigners())[1]);
+
+            // then
+            await expect(eventManagerContractFromAnotherSigner.claimQrCode(eventAddress, 1, qrId))
+                .revertedWith("not an owner to burn the token");
+        });
     });
 });

@@ -31,6 +31,7 @@ export interface EventNFTInterface extends utils.Interface {
   functions: {
     "approve(address,uint256)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
+    "burnToken(address,uint16)": FunctionFragment;
     "cid()": FunctionFragment;
     "commonTokenURI()": FunctionFragment;
     "endDate()": FunctionFragment;
@@ -58,6 +59,7 @@ export interface EventNFTInterface extends utils.Interface {
     nameOrSignatureOrTopic:
       | "approve"
       | "balanceOf"
+      | "burnToken"
       | "cid"
       | "commonTokenURI"
       | "endDate"
@@ -88,6 +90,10 @@ export interface EventNFTInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "balanceOf",
     values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "burnToken",
+    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(functionFragment: "cid", values?: undefined): string;
   encodeFunctionData(
@@ -171,6 +177,7 @@ export interface EventNFTInterface extends utils.Interface {
 
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "burnToken", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "cid", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "commonTokenURI",
@@ -325,6 +332,12 @@ export interface EventNFT extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
+    burnToken(
+      tokenOwner: PromiseOrValue<string>,
+      tokenId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
     cid(overrides?: CallOverrides): Promise<[string]>;
 
     commonTokenURI(overrides?: CallOverrides): Promise<[string]>;
@@ -423,6 +436,12 @@ export interface EventNFT extends BaseContract {
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
+  burnToken(
+    tokenOwner: PromiseOrValue<string>,
+    tokenId: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
   cid(overrides?: CallOverrides): Promise<string>;
 
   commonTokenURI(overrides?: CallOverrides): Promise<string>;
@@ -520,6 +539,12 @@ export interface EventNFT extends BaseContract {
       owner: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    burnToken(
+      tokenOwner: PromiseOrValue<string>,
+      tokenId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     cid(overrides?: CallOverrides): Promise<string>;
 
@@ -662,6 +687,12 @@ export interface EventNFT extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    burnToken(
+      tokenOwner: PromiseOrValue<string>,
+      tokenId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
     cid(overrides?: CallOverrides): Promise<BigNumber>;
 
     commonTokenURI(overrides?: CallOverrides): Promise<BigNumber>;
@@ -759,6 +790,12 @@ export interface EventNFT extends BaseContract {
     balanceOf(
       owner: PromiseOrValue<string>,
       overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    burnToken(
+      tokenOwner: PromiseOrValue<string>,
+      tokenId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     cid(overrides?: CallOverrides): Promise<PopulatedTransaction>;

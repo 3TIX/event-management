@@ -30,4 +30,9 @@ contract EventNFT is ERC721URIStorage, Ownable {
         _setTokenURI(newItemId, commonTokenURI);
         return newItemId;
     }
+
+    function burnToken(address tokenOwner, uint16 tokenId) public onlyOwner {
+        require(_isApprovedOrOwner(tokenOwner, tokenId), "not an owner to burn the token");
+        _burn(tokenId);
+    }
 }

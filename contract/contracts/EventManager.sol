@@ -12,6 +12,7 @@ contract EventManager {
     address payable public owner;
 
     event EventCreated(address eventAddress);
+    event QrCodeClaimed(string qrCodeId);
 
     constructor() {
         owner = payable(msg.sender);
@@ -33,5 +34,11 @@ contract EventManager {
         // TODO check ticket price against sent amount
         EventNFT eventNftContract = EventNFT(eventAddress);
         return eventNftContract.mintToken(msg.sender);
+    }
+
+    function claimQrCode(address eventAddress, uint16 tokenId, string memory qrCodeId) public {
+        EventNFT eventNftContract = EventNFT(eventAddress);
+        eventNftContract.burnToken(msg.sender, tokenId);
+        emit QrCodeClaimed(qrCodeId);
     }
 }
