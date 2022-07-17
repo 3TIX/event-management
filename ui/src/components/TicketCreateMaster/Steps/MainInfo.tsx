@@ -2,6 +2,7 @@ import { Box, Button, HStack, Input, Text, VStack } from "@chakra-ui/react"
 import { MasterField } from "../../MasterField"
 import { StepProps } from "../TicketCreateMaster"
 import React from "react"
+import { NextButton } from "../NextButton"
 
 export const MainInfo = ({ setStepIndex, stepsAmount }: StepProps) => {
   return (
@@ -29,19 +30,7 @@ export const MainInfo = ({ setStepIndex, stepsAmount }: StepProps) => {
         <Input mt={0} size="sm" variant="unstyled" />
       </MasterField>
 
-      <Button
-        colorScheme="primary"
-        color="black"
-        width="100%"
-        borderRadius="100px"
-        onClick={() =>
-          setStepIndex((currentIndex) =>
-            currentIndex === stepsAmount ? currentIndex : currentIndex + 1
-          )
-        }
-      >
-        Next
-      </Button>
+      <NextButton stepsAmount={stepsAmount} setStepIndex={setStepIndex} />
     </VStack>
   )
 }
