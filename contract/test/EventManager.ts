@@ -118,7 +118,7 @@ describe("EventManager", async () => {
 
             // then
             await expect(transaction).to.emit(eventManagerContract, 'QrCodeClaimed')
-                .withArgs(qrId);
+                .withArgs(eventAddress, 1, qrId);
         });
         it("Should not allow to burn NFT if not an owner", async () => {
             // given

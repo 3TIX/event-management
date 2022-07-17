@@ -99,7 +99,7 @@ export interface EventManagerInterface extends utils.Interface {
 
   events: {
     "EventCreated(address)": EventFragment;
-    "QrCodeClaimed(string)": EventFragment;
+    "QrCodeClaimed(address,uint16,string)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "EventCreated"): EventFragment;
@@ -114,9 +114,14 @@ export type EventCreatedEvent = TypedEvent<[string], EventCreatedEventObject>;
 export type EventCreatedEventFilter = TypedEventFilter<EventCreatedEvent>;
 
 export interface QrCodeClaimedEventObject {
+  eventAddress: string;
+  tokenId: number;
   qrCodeId: string;
 }
-export type QrCodeClaimedEvent = TypedEvent<[string], QrCodeClaimedEventObject>;
+export type QrCodeClaimedEvent = TypedEvent<
+  [string, number, string],
+  QrCodeClaimedEventObject
+>;
 
 export type QrCodeClaimedEventFilter = TypedEventFilter<QrCodeClaimedEvent>;
 
@@ -254,8 +259,16 @@ export interface EventManager extends BaseContract {
     "EventCreated(address)"(eventAddress?: null): EventCreatedEventFilter;
     EventCreated(eventAddress?: null): EventCreatedEventFilter;
 
-    "QrCodeClaimed(string)"(qrCodeId?: null): QrCodeClaimedEventFilter;
-    QrCodeClaimed(qrCodeId?: null): QrCodeClaimedEventFilter;
+    "QrCodeClaimed(address,uint16,string)"(
+      eventAddress?: null,
+      tokenId?: null,
+      qrCodeId?: null
+    ): QrCodeClaimedEventFilter;
+    QrCodeClaimed(
+      eventAddress?: null,
+      tokenId?: null,
+      qrCodeId?: null
+    ): QrCodeClaimedEventFilter;
   };
 
   estimateGas: {
