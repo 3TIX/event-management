@@ -31,6 +31,7 @@ import type {
 export interface EventManagerInterface extends utils.Interface {
   functions: {
     "buyTicket(address)": FunctionFragment;
+    "claimQrCode(address,uint16,string)": FunctionFragment;
     "createEvent(string,string,bytes,uint16,uint256)": FunctionFragment;
     "createdEvents(uint256)": FunctionFragment;
     "fee()": FunctionFragment;
@@ -41,6 +42,7 @@ export interface EventManagerInterface extends utils.Interface {
   getFunction(
     nameOrSignatureOrTopic:
       | "buyTicket"
+      | "claimQrCode"
       | "createEvent"
       | "createdEvents"
       | "fee"
@@ -51,6 +53,14 @@ export interface EventManagerInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "buyTicket",
     values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "claimQrCode",
+    values: [
+      PromiseOrValue<string>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<string>
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: "createEvent",
@@ -72,6 +82,10 @@ export interface EventManagerInterface extends utils.Interface {
 
   decodeFunctionResult(functionFragment: "buyTicket", data: BytesLike): Result;
   decodeFunctionResult(
+    functionFragment: "claimQrCode",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "createEvent",
     data: BytesLike
   ): Result;
@@ -85,9 +99,11 @@ export interface EventManagerInterface extends utils.Interface {
 
   events: {
     "EventCreated(address)": EventFragment;
+    "QrCodeClaimed(address,uint16,string)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "EventCreated"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "QrCodeClaimed"): EventFragment;
 }
 
 export interface EventCreatedEventObject {
@@ -96,6 +112,18 @@ export interface EventCreatedEventObject {
 export type EventCreatedEvent = TypedEvent<[string], EventCreatedEventObject>;
 
 export type EventCreatedEventFilter = TypedEventFilter<EventCreatedEvent>;
+
+export interface QrCodeClaimedEventObject {
+  eventAddress: string;
+  tokenId: number;
+  qrCodeId: string;
+}
+export type QrCodeClaimedEvent = TypedEvent<
+  [string, number, string],
+  QrCodeClaimedEventObject
+>;
+
+export type QrCodeClaimedEventFilter = TypedEventFilter<QrCodeClaimedEvent>;
 
 export interface EventManager extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -129,6 +157,13 @@ export interface EventManager extends BaseContract {
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
+    claimQrCode(
+      eventAddress: PromiseOrValue<string>,
+      tokenId: PromiseOrValue<BigNumberish>,
+      qrCodeId: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
     createEvent(
       eventName: PromiseOrValue<string>,
       imageURI: PromiseOrValue<string>,
@@ -155,6 +190,13 @@ export interface EventManager extends BaseContract {
   buyTicket(
     eventAddress: PromiseOrValue<string>,
     overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  claimQrCode(
+    eventAddress: PromiseOrValue<string>,
+    tokenId: PromiseOrValue<BigNumberish>,
+    qrCodeId: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   createEvent(
@@ -185,6 +227,13 @@ export interface EventManager extends BaseContract {
       overrides?: CallOverrides
     ): Promise<number>;
 
+    claimQrCode(
+      eventAddress: PromiseOrValue<string>,
+      tokenId: PromiseOrValue<BigNumberish>,
+      qrCodeId: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     createEvent(
       eventName: PromiseOrValue<string>,
       imageURI: PromiseOrValue<string>,
@@ -209,12 +258,30 @@ export interface EventManager extends BaseContract {
   filters: {
     "EventCreated(address)"(eventAddress?: null): EventCreatedEventFilter;
     EventCreated(eventAddress?: null): EventCreatedEventFilter;
+
+    "QrCodeClaimed(address,uint16,string)"(
+      eventAddress?: null,
+      tokenId?: null,
+      qrCodeId?: null
+    ): QrCodeClaimedEventFilter;
+    QrCodeClaimed(
+      eventAddress?: null,
+      tokenId?: null,
+      qrCodeId?: null
+    ): QrCodeClaimedEventFilter;
   };
 
   estimateGas: {
     buyTicket(
       eventAddress: PromiseOrValue<string>,
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    claimQrCode(
+      eventAddress: PromiseOrValue<string>,
+      tokenId: PromiseOrValue<BigNumberish>,
+      qrCodeId: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     createEvent(
@@ -244,6 +311,13 @@ export interface EventManager extends BaseContract {
     buyTicket(
       eventAddress: PromiseOrValue<string>,
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    claimQrCode(
+      eventAddress: PromiseOrValue<string>,
+      tokenId: PromiseOrValue<BigNumberish>,
+      qrCodeId: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     createEvent(
