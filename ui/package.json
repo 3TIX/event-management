@@ -29,6 +29,7 @@
     "web3modal": "^1.9.8"
   },
   "scripts": {
+    "contract-dependencies": "(cd ../contract && yarn && yarn run build)",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
