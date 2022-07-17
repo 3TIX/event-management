@@ -3,6 +3,7 @@ import { Image, Text, Textarea, VStack, Flex, Button } from "@chakra-ui/react"
 import { MasterField } from "../../MasterField"
 import ReactImageUploading, { ImageListType } from "react-images-uploading"
 import { StepProps } from "../TicketCreateMaster"
+import { NextButton } from "../NextButton"
 
 export const Description = ({ setStepIndex, stepsAmount }: StepProps) => {
   const [images, setImages] = React.useState<ImageListType>([])
@@ -48,19 +49,7 @@ export const Description = ({ setStepIndex, stepsAmount }: StepProps) => {
         </ReactImageUploading>
       </MasterField>
 
-      <Button
-        colorScheme="primary"
-        color="black"
-        width="100%"
-        borderRadius="100px"
-        onClick={() =>
-          setStepIndex((currentIndex) =>
-            currentIndex === stepsAmount ? currentIndex : currentIndex + 1
-          )
-        }
-      >
-        Next
-      </Button>
+      <NextButton stepsAmount={stepsAmount} setStepIndex={setStepIndex} />
     </VStack>
   )
 }

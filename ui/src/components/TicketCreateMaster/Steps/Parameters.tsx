@@ -14,6 +14,7 @@ import { StepProps } from "../TicketCreateMaster"
 import React, { useContext } from "react"
 import { Web3Context } from "../../../contexts/Web3Context"
 import { Web3Connect } from "../../Web3Connect"
+import { NextButton } from "../NextButton"
 
 export const Parameters = ({ setStepIndex, stepsAmount }: StepProps) => {
   const { account } = useContext(Web3Context)
@@ -47,19 +48,7 @@ export const Parameters = ({ setStepIndex, stepsAmount }: StepProps) => {
       </MasterField>
 
       {account ? (
-        <Button
-          colorScheme="primary"
-          color="black"
-          width="100%"
-          borderRadius="100px"
-          onClick={() =>
-            setStepIndex((currentIndex) =>
-              currentIndex === stepsAmount ? currentIndex : currentIndex + 1
-            )
-          }
-        >
-          Next
-        </Button>
+        <NextButton stepsAmount={stepsAmount} setStepIndex={setStepIndex} />
       ) : (
         <Web3Connect variant="solid" width="100%" color="black" />
       )}
