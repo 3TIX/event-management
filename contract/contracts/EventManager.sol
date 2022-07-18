@@ -8,14 +8,17 @@ contract EventManager {
 
     uint256 constant public fee = 10 ** 17;
 
-    address[] public createdEvents;
+    mapping(address => bool) public supportedCurrencies;
     address payable public owner;
 
     event EventCreated(address eventAddress, string eventURI);
     event QrCodeClaimed(address eventAddress, uint16 tokenId, string qrCodeId);
 
-    constructor() {
+    constructor(address[] memory _supportedCurrencies) {
         owner = payable(msg.sender);
+        for (uint i=0; i < _supportedCurrencies.length; i++) {
+            supportedCurrencies[_supportedCurrencies[i]] = true;
+        }
     }
 
     function withdraw() public {
@@ -23,10 +26,10 @@ contract EventManager {
         owner.transfer(address(this).balance);
     }
 
-    function createEvent(string calldata eventName, string calldata eventSymbol, string calldata eventURI, uint16 ticketsTotal) public payable {
+    function createEvent(string calldata eventName, string calldata eventSymbol, string calldata eventURI, uint16 ticketsTotal, address currency, uint256 price) public payable {
         require(msg.value >= fee, "too small fee");
-        EventNFT newEvent = new EventNFT(msg.sender, eventName, eventSymbol, eventURI, ticketsTotal);
-        createdEvents.push(address(newEvent));
+        require(supportedCurrencies[currency] == true || currency == address(0), "not supported currency");
+        EventNFT newEvent = new EventNFT(msg.sender, eventName, eventSymbol, eventURI, ticketsTotal, currency, price);
         emit EventCreated(address(newEvent), eventURI);
     }
 

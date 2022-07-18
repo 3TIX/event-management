@@ -9,11 +9,15 @@ contract EventNFT is ERC721URIStorage, Ownable {
     uint16 public mintedCount;
     uint16 public maxTokens;
     string public commonTokenURI;
+    address public currency;
+    uint256 public price;
 
-    constructor(address _eventOwner, string memory tokenName, string memory tokenSymbol, string memory _tokenURI, uint16 _maxTokens) ERC721(tokenName, tokenSymbol) {
+    constructor(address _eventOwner, string memory tokenName, string memory tokenSymbol, string memory _tokenURI, uint16 _maxTokens, address _currency, uint256 _price) ERC721(tokenName, tokenSymbol) {
         eventOwner = _eventOwner;
         commonTokenURI = _tokenURI;
         maxTokens = _maxTokens;
+        currency = _currency;
+        price = _price;
     }
 
     function mintToken(address tokenOwner) public onlyOwner returns (uint16) {
