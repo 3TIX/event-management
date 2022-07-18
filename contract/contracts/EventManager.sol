@@ -11,7 +11,7 @@ contract EventManager {
     address[] public createdEvents;
     address payable public owner;
 
-    event EventCreated(address eventAddress);
+    event EventCreated(address eventAddress, string eventURI);
     event QrCodeClaimed(address eventAddress, uint16 tokenId, string qrCodeId);
 
     constructor() {
@@ -27,7 +27,7 @@ contract EventManager {
         require(msg.value >= fee, "too small fee");
         EventNFT newEvent = new EventNFT(msg.sender, eventName, eventSymbol, eventURI, ticketsTotal);
         createdEvents.push(address(newEvent));
-        emit EventCreated(address(newEvent));
+        emit EventCreated(address(newEvent), eventURI);
     }
 
     function buyTicket(address eventAddress) public payable returns (uint16) {

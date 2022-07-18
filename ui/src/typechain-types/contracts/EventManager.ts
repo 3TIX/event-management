@@ -97,7 +97,7 @@ export interface EventManagerInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "withdraw", data: BytesLike): Result;
 
   events: {
-    "EventCreated(address)": EventFragment;
+    "EventCreated(address,string)": EventFragment;
     "QrCodeClaimed(address,uint16,string)": EventFragment;
   };
 
@@ -107,8 +107,12 @@ export interface EventManagerInterface extends utils.Interface {
 
 export interface EventCreatedEventObject {
   eventAddress: string;
+  eventURI: string;
 }
-export type EventCreatedEvent = TypedEvent<[string], EventCreatedEventObject>;
+export type EventCreatedEvent = TypedEvent<
+  [string, string],
+  EventCreatedEventObject
+>;
 
 export type EventCreatedEventFilter = TypedEventFilter<EventCreatedEvent>;
 
@@ -252,8 +256,11 @@ export interface EventManager extends BaseContract {
   };
 
   filters: {
-    "EventCreated(address)"(eventAddress?: null): EventCreatedEventFilter;
-    EventCreated(eventAddress?: null): EventCreatedEventFilter;
+    "EventCreated(address,string)"(
+      eventAddress?: null,
+      eventURI?: null
+    ): EventCreatedEventFilter;
+    EventCreated(eventAddress?: null, eventURI?: null): EventCreatedEventFilter;
 
     "QrCodeClaimed(address,uint16,string)"(
       eventAddress?: null,
