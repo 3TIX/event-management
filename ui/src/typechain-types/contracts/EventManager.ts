@@ -32,7 +32,7 @@ export interface EventManagerInterface extends utils.Interface {
   functions: {
     "buyTicket(address)": FunctionFragment;
     "claimQrCode(address,uint16,string)": FunctionFragment;
-    "createEvent(string,string,bytes,uint16,uint256)": FunctionFragment;
+    "createEvent(string,string,string,uint16)": FunctionFragment;
     "createdEvents(uint256)": FunctionFragment;
     "fee()": FunctionFragment;
     "owner()": FunctionFragment;
@@ -67,8 +67,7 @@ export interface EventManagerInterface extends utils.Interface {
     values: [
       PromiseOrValue<string>,
       PromiseOrValue<string>,
-      PromiseOrValue<BytesLike>,
-      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<string>,
       PromiseOrValue<BigNumberish>
     ]
   ): string;
@@ -166,10 +165,9 @@ export interface EventManager extends BaseContract {
 
     createEvent(
       eventName: PromiseOrValue<string>,
-      imageURI: PromiseOrValue<string>,
-      cid: PromiseOrValue<BytesLike>,
+      eventSymbol: PromiseOrValue<string>,
+      eventURI: PromiseOrValue<string>,
       ticketsTotal: PromiseOrValue<BigNumberish>,
-      endDate: PromiseOrValue<BigNumberish>,
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -201,10 +199,9 @@ export interface EventManager extends BaseContract {
 
   createEvent(
     eventName: PromiseOrValue<string>,
-    imageURI: PromiseOrValue<string>,
-    cid: PromiseOrValue<BytesLike>,
+    eventSymbol: PromiseOrValue<string>,
+    eventURI: PromiseOrValue<string>,
     ticketsTotal: PromiseOrValue<BigNumberish>,
-    endDate: PromiseOrValue<BigNumberish>,
     overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -236,10 +233,9 @@ export interface EventManager extends BaseContract {
 
     createEvent(
       eventName: PromiseOrValue<string>,
-      imageURI: PromiseOrValue<string>,
-      cid: PromiseOrValue<BytesLike>,
+      eventSymbol: PromiseOrValue<string>,
+      eventURI: PromiseOrValue<string>,
       ticketsTotal: PromiseOrValue<BigNumberish>,
-      endDate: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -286,10 +282,9 @@ export interface EventManager extends BaseContract {
 
     createEvent(
       eventName: PromiseOrValue<string>,
-      imageURI: PromiseOrValue<string>,
-      cid: PromiseOrValue<BytesLike>,
+      eventSymbol: PromiseOrValue<string>,
+      eventURI: PromiseOrValue<string>,
       ticketsTotal: PromiseOrValue<BigNumberish>,
-      endDate: PromiseOrValue<BigNumberish>,
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -322,10 +317,9 @@ export interface EventManager extends BaseContract {
 
     createEvent(
       eventName: PromiseOrValue<string>,
-      imageURI: PromiseOrValue<string>,
-      cid: PromiseOrValue<BytesLike>,
+      eventSymbol: PromiseOrValue<string>,
+      eventURI: PromiseOrValue<string>,
       ticketsTotal: PromiseOrValue<BigNumberish>,
-      endDate: PromiseOrValue<BigNumberish>,
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 

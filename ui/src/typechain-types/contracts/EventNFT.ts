@@ -32,9 +32,7 @@ export interface EventNFTInterface extends utils.Interface {
     "approve(address,uint256)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
     "burnToken(address,uint16)": FunctionFragment;
-    "cid()": FunctionFragment;
     "commonTokenURI()": FunctionFragment;
-    "endDate()": FunctionFragment;
     "eventOwner()": FunctionFragment;
     "getApproved(uint256)": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
@@ -60,9 +58,7 @@ export interface EventNFTInterface extends utils.Interface {
       | "approve"
       | "balanceOf"
       | "burnToken"
-      | "cid"
       | "commonTokenURI"
-      | "endDate"
       | "eventOwner"
       | "getApproved"
       | "isApprovedForAll"
@@ -95,12 +91,10 @@ export interface EventNFTInterface extends utils.Interface {
     functionFragment: "burnToken",
     values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
   ): string;
-  encodeFunctionData(functionFragment: "cid", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "commonTokenURI",
     values?: undefined
   ): string;
-  encodeFunctionData(functionFragment: "endDate", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "eventOwner",
     values?: undefined
@@ -178,12 +172,10 @@ export interface EventNFTInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "burnToken", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "cid", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "commonTokenURI",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "endDate", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "eventOwner", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getApproved",
@@ -338,11 +330,7 @@ export interface EventNFT extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    cid(overrides?: CallOverrides): Promise<[string]>;
-
     commonTokenURI(overrides?: CallOverrides): Promise<[string]>;
-
-    endDate(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     eventOwner(overrides?: CallOverrides): Promise<[string]>;
 
@@ -442,11 +430,7 @@ export interface EventNFT extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  cid(overrides?: CallOverrides): Promise<string>;
-
   commonTokenURI(overrides?: CallOverrides): Promise<string>;
-
-  endDate(overrides?: CallOverrides): Promise<BigNumber>;
 
   eventOwner(overrides?: CallOverrides): Promise<string>;
 
@@ -546,11 +530,7 @@ export interface EventNFT extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    cid(overrides?: CallOverrides): Promise<string>;
-
     commonTokenURI(overrides?: CallOverrides): Promise<string>;
-
-    endDate(overrides?: CallOverrides): Promise<BigNumber>;
 
     eventOwner(overrides?: CallOverrides): Promise<string>;
 
@@ -693,11 +673,7 @@ export interface EventNFT extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    cid(overrides?: CallOverrides): Promise<BigNumber>;
-
     commonTokenURI(overrides?: CallOverrides): Promise<BigNumber>;
-
-    endDate(overrides?: CallOverrides): Promise<BigNumber>;
 
     eventOwner(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -798,11 +774,7 @@ export interface EventNFT extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    cid(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
     commonTokenURI(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    endDate(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     eventOwner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
