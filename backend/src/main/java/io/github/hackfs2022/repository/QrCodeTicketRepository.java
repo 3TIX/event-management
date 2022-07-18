@@ -9,11 +9,14 @@ import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
 import org.jooq.impl.DefaultConfiguration;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 import static io.github.hackfs2022.db.schema.Tables.QR_CODE_TICKETS;
 import static io.github.hackfs2022.model.QrCodeTicket.Builder.qrCodeTicket;
+import static java.time.Clock.systemUTC;
+import static java.time.Instant.now;
 import static java.util.Optional.empty;
 import static org.jooq.impl.DSL.max;
 
@@ -57,8 +60,10 @@ public class QrCodeTicketRepository {
     }
 
     public QrCodeTicket update(QrCodeTicket ticket) {
+        final var record = toRecord(ticket);
+        record.set(QR_CODE_TICKETS.UPDATED_DATE, now(systemUTC()));
         final var result = db.update(QR_CODE_TICKETS)
-            .set(toRecord(ticket))
+            .set(record)
             .where(QR_CODE_TICKETS.ID.equal(ticket.id))
             .execute();
         if (result == 0) {
@@ -78,6 +83,15 @@ public class QrCodeTicketRepository {
             return empty();
         }
         return Optional.of(result);
+    }
+
+    public List<QrCodeTicket> findAll(Status status) {
+        return db.selectFrom(QR_CODE_TICKETS)
+            .where(QR_CODE_TICKETS.STATUS.equal(status.name()))
+            .fetch()
+            .stream()
+            .map(this::fromRecord)
+            .toList();
     }
 
     private QrCodeTicketsRecord toRecord(QrCodeTicket ticket) {

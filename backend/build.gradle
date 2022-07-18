@@ -33,6 +33,8 @@ dependencies {
     implementation "org.jooq:jooq:$jooqVersion"
 
     implementation "com.google.guava:guava:$guavaVersion"
+    implementation "com.google.zxing:javase:$googleZxingVersion"
+    implementation "javax.mail:mail:$javaMailVersion"
 
     testImplementation "org.assertj:assertj-core:$assertjVersion"
 
