@@ -4,3 +4,22 @@ type QrCodeClaimed @entity(immutable: true) {
     tokenId: Int!
     blockNumber: BigInt!
 }
+
+type CreatedEvent @entity(immutable: true) {
+    id: ID!
+    cid: String!
+    creatorAddress: Bytes!
+    name: String!
+    description: String!
+    image: String!
+    isOnline: Boolean!
+    location: String!
+    startDate: String!
+    endDate: String!
+    organiserEmail: String!
+    ticketCount: BigInt!
+    ticketPrice: String!
+    ticketCurrency: Bytes!
+    royaltyPercentage: Int!
+    distributePoaps: Boolean!
+}
