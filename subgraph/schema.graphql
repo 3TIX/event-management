@@ -1,0 +1,6 @@
+type QrCodeClaimed @entity(immutable: true) {
+    id: ID!
+    eventAddress: Bytes!
+    tokenId: Int!
+    blockNumber: BigInt!
+}

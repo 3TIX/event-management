@@ -1,0 +1,27 @@
+specVersion: 0.0.4
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: EventManager
+    network: mumbai
+    source:
+      address: "0x0cC1Bed932a5CffBcc5cb3e6A531633Ec04d68c5"
+      abi: EventManager
+      startBlock: 27225078
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - EventCreated
+        - QrCodeClaimed
+      abis:
+        - name: EventManager
+          file: ./abis/EventManager.json
+      eventHandlers:
+        - event: EventCreated(address,string)
+          handler: handleEventCreated
+        - event: QrCodeClaimed(address,uint16,string)
+          handler: handleQrCodeClaimed
+      file: ./src/event-manager.ts
