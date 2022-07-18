@@ -32,10 +32,10 @@ export interface EventManagerInterface extends utils.Interface {
   functions: {
     "buyTicket(address)": FunctionFragment;
     "claimQrCode(address,uint16,string)": FunctionFragment;
-    "createEvent(string,string,string,uint16)": FunctionFragment;
-    "createdEvents(uint256)": FunctionFragment;
+    "createEvent(string,string,string,uint16,address,uint256)": FunctionFragment;
     "fee()": FunctionFragment;
     "owner()": FunctionFragment;
+    "supportedCurrencies(address)": FunctionFragment;
     "withdraw()": FunctionFragment;
   };
 
@@ -44,9 +44,9 @@ export interface EventManagerInterface extends utils.Interface {
       | "buyTicket"
       | "claimQrCode"
       | "createEvent"
-      | "createdEvents"
       | "fee"
       | "owner"
+      | "supportedCurrencies"
       | "withdraw"
   ): FunctionFragment;
 
@@ -68,15 +68,17 @@ export interface EventManagerInterface extends utils.Interface {
       PromiseOrValue<string>,
       PromiseOrValue<string>,
       PromiseOrValue<string>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<string>,
       PromiseOrValue<BigNumberish>
     ]
   ): string;
-  encodeFunctionData(
-    functionFragment: "createdEvents",
-    values: [PromiseOrValue<BigNumberish>]
-  ): string;
   encodeFunctionData(functionFragment: "fee", values?: undefined): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "supportedCurrencies",
+    values: [PromiseOrValue<string>]
+  ): string;
   encodeFunctionData(functionFragment: "withdraw", values?: undefined): string;
 
   decodeFunctionResult(functionFragment: "buyTicket", data: BytesLike): Result;
@@ -88,12 +90,12 @@ export interface EventManagerInterface extends utils.Interface {
     functionFragment: "createEvent",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "createdEvents",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(functionFragment: "fee", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "supportedCurrencies",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "withdraw", data: BytesLike): Result;
 
   events: {
@@ -172,17 +174,19 @@ export interface EventManager extends BaseContract {
       eventSymbol: PromiseOrValue<string>,
       eventURI: PromiseOrValue<string>,
       ticketsTotal: PromiseOrValue<BigNumberish>,
+      currency: PromiseOrValue<string>,
+      price: PromiseOrValue<BigNumberish>,
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
-
-    createdEvents(
-      arg0: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<[string]>;
 
     fee(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     owner(overrides?: CallOverrides): Promise<[string]>;
+
+    supportedCurrencies(
+      arg0: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<[boolean]>;
 
     withdraw(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -206,17 +210,19 @@ export interface EventManager extends BaseContract {
     eventSymbol: PromiseOrValue<string>,
     eventURI: PromiseOrValue<string>,
     ticketsTotal: PromiseOrValue<BigNumberish>,
+    currency: PromiseOrValue<string>,
+    price: PromiseOrValue<BigNumberish>,
     overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
-
-  createdEvents(
-    arg0: PromiseOrValue<BigNumberish>,
-    overrides?: CallOverrides
-  ): Promise<string>;
 
   fee(overrides?: CallOverrides): Promise<BigNumber>;
 
   owner(overrides?: CallOverrides): Promise<string>;
+
+  supportedCurrencies(
+    arg0: PromiseOrValue<string>,
+    overrides?: CallOverrides
+  ): Promise<boolean>;
 
   withdraw(
     overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -240,17 +246,19 @@ export interface EventManager extends BaseContract {
       eventSymbol: PromiseOrValue<string>,
       eventURI: PromiseOrValue<string>,
       ticketsTotal: PromiseOrValue<BigNumberish>,
+      currency: PromiseOrValue<string>,
+      price: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<void>;
-
-    createdEvents(
-      arg0: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<string>;
 
     fee(overrides?: CallOverrides): Promise<BigNumber>;
 
     owner(overrides?: CallOverrides): Promise<string>;
+
+    supportedCurrencies(
+      arg0: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
 
     withdraw(overrides?: CallOverrides): Promise<void>;
   };
@@ -292,17 +300,19 @@ export interface EventManager extends BaseContract {
       eventSymbol: PromiseOrValue<string>,
       eventURI: PromiseOrValue<string>,
       ticketsTotal: PromiseOrValue<BigNumberish>,
+      currency: PromiseOrValue<string>,
+      price: PromiseOrValue<BigNumberish>,
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    createdEvents(
-      arg0: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     fee(overrides?: CallOverrides): Promise<BigNumber>;
 
     owner(overrides?: CallOverrides): Promise<BigNumber>;
+
+    supportedCurrencies(
+      arg0: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     withdraw(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -327,17 +337,19 @@ export interface EventManager extends BaseContract {
       eventSymbol: PromiseOrValue<string>,
       eventURI: PromiseOrValue<string>,
       ticketsTotal: PromiseOrValue<BigNumberish>,
+      currency: PromiseOrValue<string>,
+      price: PromiseOrValue<BigNumberish>,
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    createdEvents(
-      arg0: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     fee(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    supportedCurrencies(
+      arg0: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     withdraw(
       overrides?: Overrides & { from?: PromiseOrValue<string> }

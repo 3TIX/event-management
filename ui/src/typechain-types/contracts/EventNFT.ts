@@ -33,6 +33,7 @@ export interface EventNFTInterface extends utils.Interface {
     "balanceOf(address)": FunctionFragment;
     "burnToken(address,uint16)": FunctionFragment;
     "commonTokenURI()": FunctionFragment;
+    "currency()": FunctionFragment;
     "eventOwner()": FunctionFragment;
     "getApproved(uint256)": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
@@ -42,6 +43,7 @@ export interface EventNFTInterface extends utils.Interface {
     "name()": FunctionFragment;
     "owner()": FunctionFragment;
     "ownerOf(uint256)": FunctionFragment;
+    "price()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "safeTransferFrom(address,address,uint256)": FunctionFragment;
     "safeTransferFrom(address,address,uint256,bytes)": FunctionFragment;
@@ -59,6 +61,7 @@ export interface EventNFTInterface extends utils.Interface {
       | "balanceOf"
       | "burnToken"
       | "commonTokenURI"
+      | "currency"
       | "eventOwner"
       | "getApproved"
       | "isApprovedForAll"
@@ -68,6 +71,7 @@ export interface EventNFTInterface extends utils.Interface {
       | "name"
       | "owner"
       | "ownerOf"
+      | "price"
       | "renounceOwnership"
       | "safeTransferFrom(address,address,uint256)"
       | "safeTransferFrom(address,address,uint256,bytes)"
@@ -95,6 +99,7 @@ export interface EventNFTInterface extends utils.Interface {
     functionFragment: "commonTokenURI",
     values?: undefined
   ): string;
+  encodeFunctionData(functionFragment: "currency", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "eventOwner",
     values?: undefined
@@ -122,6 +127,7 @@ export interface EventNFTInterface extends utils.Interface {
     functionFragment: "ownerOf",
     values: [PromiseOrValue<BigNumberish>]
   ): string;
+  encodeFunctionData(functionFragment: "price", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "renounceOwnership",
     values?: undefined
@@ -176,6 +182,7 @@ export interface EventNFTInterface extends utils.Interface {
     functionFragment: "commonTokenURI",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "currency", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "eventOwner", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getApproved",
@@ -194,6 +201,7 @@ export interface EventNFTInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "ownerOf", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "price", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "renounceOwnership",
     data: BytesLike
@@ -332,6 +340,8 @@ export interface EventNFT extends BaseContract {
 
     commonTokenURI(overrides?: CallOverrides): Promise<[string]>;
 
+    currency(overrides?: CallOverrides): Promise<[string]>;
+
     eventOwner(overrides?: CallOverrides): Promise<[string]>;
 
     getApproved(
@@ -362,6 +372,8 @@ export interface EventNFT extends BaseContract {
       tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<[string]>;
+
+    price(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     renounceOwnership(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -432,6 +444,8 @@ export interface EventNFT extends BaseContract {
 
   commonTokenURI(overrides?: CallOverrides): Promise<string>;
 
+  currency(overrides?: CallOverrides): Promise<string>;
+
   eventOwner(overrides?: CallOverrides): Promise<string>;
 
   getApproved(
@@ -462,6 +476,8 @@ export interface EventNFT extends BaseContract {
     tokenId: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
   ): Promise<string>;
+
+  price(overrides?: CallOverrides): Promise<BigNumber>;
 
   renounceOwnership(
     overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -532,6 +548,8 @@ export interface EventNFT extends BaseContract {
 
     commonTokenURI(overrides?: CallOverrides): Promise<string>;
 
+    currency(overrides?: CallOverrides): Promise<string>;
+
     eventOwner(overrides?: CallOverrides): Promise<string>;
 
     getApproved(
@@ -562,6 +580,8 @@ export interface EventNFT extends BaseContract {
       tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<string>;
+
+    price(overrides?: CallOverrides): Promise<BigNumber>;
 
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
 
@@ -675,6 +695,8 @@ export interface EventNFT extends BaseContract {
 
     commonTokenURI(overrides?: CallOverrides): Promise<BigNumber>;
 
+    currency(overrides?: CallOverrides): Promise<BigNumber>;
+
     eventOwner(overrides?: CallOverrides): Promise<BigNumber>;
 
     getApproved(
@@ -705,6 +727,8 @@ export interface EventNFT extends BaseContract {
       tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    price(overrides?: CallOverrides): Promise<BigNumber>;
 
     renounceOwnership(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -776,6 +800,8 @@ export interface EventNFT extends BaseContract {
 
     commonTokenURI(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    currency(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     eventOwner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     getApproved(
@@ -806,6 +832,8 @@ export interface EventNFT extends BaseContract {
       tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
+
+    price(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     renounceOwnership(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
