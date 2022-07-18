@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import static io.github.hackfs2022.model.QrCodeTicket.Builder.qrCodeTicket;
 import static io.github.hackfs2022.model.QrCodeTicket.Status.NFT_BURNED;
+import static io.github.hackfs2022.model.QrCodeTicket.Status.QR_CODE_SENT;
 import static java.time.Clock.systemUTC;
 import static java.time.Instant.now;
 import static java.util.Optional.empty;
@@ -65,6 +66,12 @@ public class QrCodeTicket {
             .contractAddress(Optional.of(contractAddress))
             .tokenId(Optional.of(tokenId))
             .blockNumber(Optional.of(blockNumber))
+            .build();
+    }
+
+    public QrCodeTicket qrCodeSent() {
+        return copy()
+            .status(QR_CODE_SENT)
             .build();
     }
 

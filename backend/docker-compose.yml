@@ -19,3 +19,5 @@ services:
       HACK_FS_DATABASE_URL: "jdbc:postgresql://postgres:5432/hack-fs"
       HACK_FS_DATABASE_USER: "hack_fs_app"
       HACK_FS_DATABASE_PASSWORD: "hack_fs_app_password"
+      HACK_FS_EMAIL_USERNAME: ""
+      HACK_FS_EMAIL_PASSWORD: ""
