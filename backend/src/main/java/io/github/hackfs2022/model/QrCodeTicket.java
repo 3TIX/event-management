@@ -8,6 +8,7 @@ import java.util.UUID;
 import static io.github.hackfs2022.model.QrCodeTicket.Builder.qrCodeTicket;
 import static io.github.hackfs2022.model.QrCodeTicket.Status.NFT_BURNED;
 import static io.github.hackfs2022.model.QrCodeTicket.Status.QR_CODE_SENT;
+import static io.github.hackfs2022.model.QrCodeTicket.Status.QR_CODE_VALIDATED;
 import static java.time.Clock.systemUTC;
 import static java.time.Instant.now;
 import static java.util.Optional.empty;
@@ -24,7 +25,7 @@ public class QrCodeTicket {
     public final Optional<String> contractAddress;
     public final Optional<Integer> tokenId;
     public final Optional<Integer> blockNumber;
-    public final Optional<Instant> verificationDate;
+    public final Optional<Instant> validationTime;
 
     private QrCodeTicket(Builder builder) {
         this.id = builder.id;
@@ -36,7 +37,7 @@ public class QrCodeTicket {
         this.contractAddress = builder.contractAddress;
         this.tokenId = builder.tokenId;
         this.blockNumber = builder.blockNumber;
-        this.verificationDate = builder.verificationDate;
+        this.validationTime = builder.validationTime;
     }
 
     public enum Status {
@@ -57,7 +58,7 @@ public class QrCodeTicket {
             .contractAddress(contractAddress)
             .tokenId(tokenId)
             .blockNumber(blockNumber)
-            .verificationDate(verificationDate);
+            .validationTime(validationTime);
     }
 
     public QrCodeTicket nftBurned(String contractAddress, Integer tokenId, Integer blockNumber) {
@@ -75,6 +76,13 @@ public class QrCodeTicket {
             .build();
     }
 
+    public QrCodeTicket validated(Instant validationDate) {
+        return copy()
+            .status(QR_CODE_VALIDATED)
+            .validationTime(Optional.of(validationDate))
+            .build();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -89,13 +97,13 @@ public class QrCodeTicket {
             Objects.equals(contractAddress, that.contractAddress) &&
             Objects.equals(tokenId, that.tokenId) &&
             Objects.equals(blockNumber, that.blockNumber) &&
-            Objects.equals(verificationDate, that.verificationDate);
+            Objects.equals(validationTime, that.validationTime);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(id, createdDate, updatedDate, email, status, validationCode, contractAddress,
-            tokenId, blockNumber, verificationDate);
+            tokenId, blockNumber, validationTime);
     }
 
     public static final class Builder {
@@ -109,7 +117,7 @@ public class QrCodeTicket {
         private Optional<String> contractAddress = empty();
         private Optional<Integer> tokenId = empty();
         private Optional<Integer> blockNumber = empty();
-        private Optional<Instant> verificationDate = empty();
+        private Optional<Instant> validationTime = empty();
 
         private Builder() {
         }
@@ -163,8 +171,8 @@ public class QrCodeTicket {
             return this;
         }
 
-        public Builder verificationDate(Optional<Instant> verificationDate) {
-            this.verificationDate = verificationDate;
+        public Builder validationTime(Optional<Instant> validationTime) {
+            this.validationTime = validationTime;
             return this;
         }
 
