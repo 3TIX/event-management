@@ -19,6 +19,7 @@ contract EventManager {
         for (uint i=0; i < _supportedCurrencies.length; i++) {
             supportedCurrencies[_supportedCurrencies[i]] = true;
         }
+        supportedCurrencies[address(0)] = true;
     }
 
     function withdraw() public {
@@ -28,13 +29,12 @@ contract EventManager {
 
     function createEvent(string calldata eventName, string calldata eventSymbol, string calldata eventURI, uint16 ticketsTotal, address currency, uint256 price) public payable {
         require(msg.value >= fee, "too small fee");
-        require(supportedCurrencies[currency] == true || currency == address(0), "not supported currency");
+        require(supportedCurrencies[currency], "not supported currency");
         EventNFT newEvent = new EventNFT(msg.sender, eventName, eventSymbol, eventURI, ticketsTotal, currency, price);
         emit EventCreated(address(newEvent), eventURI);
     }
 
     function buyTicket(address eventAddress) public payable returns (uint16) {
-        // TODO check ticket price against sent amount
         EventNFT eventNftContract = EventNFT(eventAddress);
         return eventNftContract.mintToken(msg.sender);
     }
