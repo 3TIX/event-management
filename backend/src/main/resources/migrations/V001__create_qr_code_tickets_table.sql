@@ -8,6 +8,7 @@ CREATE TABLE qr_code_tickets
     validation_code   VARCHAR(64)  NOT NULL,
     contract_address  VARCHAR(50),
     token_id          INTEGER,
+    block_number      INTEGER,
     verification_date TIMESTAMP,
 
     CONSTRAINT claims_pk PRIMARY KEY (id)
