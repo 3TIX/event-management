@@ -1,4 +1,4 @@
-import React, { useCallback } from "react"
+import React, { useCallback, useMemo, useReducer } from "react"
 import {
   Modal,
   ModalBody,
@@ -14,23 +14,67 @@ import { BackButton } from "./BackButton"
 import { Parameters } from "./Steps/Parameters"
 import { WIP } from "./Steps/WIP"
 import { TicketCreating } from "./Steps/TicketCreating"
+import { Done } from "./Steps/Done"
+import { EventObject } from "../../types/EventObject"
 
 export type TicketCreateMasterProps = {
   isOpen: boolean
   onClose: () => void
 }
 
+/*const initialState = {
+  name: "",
+  description: "",
+  image: "",
+  isOnline: true,
+  location: "",
+  startDate: Date.now(),
+  endDate: Date.now(),
+  organiserEmail: "",
+  ticketCount: 1000,
+  ticketPrice: 100,
+  ticketCurrency: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+  royaltyPercentage: 1,
+  distributePoaps: true,
+}*/
+
+const initialState: EventObject = {
+  name: "HackFS ticket",
+  description:
+    "HackFS is an ETHGlobal hackathon focused on building the foundation for that world. We've partnered with Protocol Labs - the organization building Filecoin and IPFS - to run an event centered on dapps, web3, decentralized storage, and everything in between.",
+  image: "",
+  symbol: "SYMB",
+  isOnline: true,
+  location: "https://localhost:8080",
+  startDate: new Date().toISOString().split("T")[0],
+  endDate: new Date().toISOString().split("T")[0],
+  organiserEmail: "info@ethglobal.com",
+  ticketCount: 1000,
+  ticketPrice: 150,
+  ticketCurrency: "0x0000000000000000000000000000000000000000",
+  royaltyPercentage: 1,
+  distributePoaps: true,
+}
+
+type Action = { fieldName: string; value: unknown }
+
+function reducer(state: EventObject, action: Action) {
+  return { ...state, [action.fieldName]: action.value }
+}
+
 export type StepProps = {
-  setStepIndex: React.Dispatch<React.SetStateAction<number>>
-  stepsAmount: number
+  state: typeof initialState
+  dispatch: React.Dispatch<Action>
+  onNextClick: () => void
 }
 
 const Steps: Array<React.ComponentType<StepProps>> = [
   MainInfo,
   Description,
   Parameters,
-  WIP,
+  // WIP,
   TicketCreating,
+  Done,
 ]
 
 export const TicketCreateMaster = ({
@@ -38,13 +82,22 @@ export const TicketCreateMaster = ({
   onClose,
 }: TicketCreateMasterProps) => {
   const [stepIndex, setStepIndex] = useState(0)
+  const [state, dispatch] = useReducer(reducer, initialState)
 
-  const Component = Steps[stepIndex]
+  const Component = useMemo(() => {
+    return Steps[stepIndex]
+  }, [stepIndex])
 
   const onWizardClose = useCallback(() => {
     setStepIndex(0)
     onClose()
   }, [onClose])
+
+  const onNextClick = useCallback(() => {
+    setStepIndex((currentIndex) => {
+      return currentIndex === Steps.length - 1 ? currentIndex : currentIndex + 1
+    })
+  }, [])
 
   return (
     <Modal isOpen={isOpen} onClose={onWizardClose} isCentered>
@@ -60,7 +113,11 @@ export const TicketCreateMaster = ({
           Cancel
         </ModalCloseButton>
         <ModalBody mt={8} mb={2} display="flex" flexDirection="column">
-          <Component setStepIndex={setStepIndex} stepsAmount={Steps.length} />
+          <Component
+            state={state}
+            dispatch={dispatch}
+            onNextClick={onNextClick}
+          />
         </ModalBody>
         <StepIndicator currentStep={stepIndex} stepsAmount={Steps.length} />
       </ModalContent>

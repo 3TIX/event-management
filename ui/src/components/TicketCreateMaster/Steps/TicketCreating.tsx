@@ -1,10 +1,23 @@
-import { StepProps } from "../TicketCreateMaster"
 import { Box, Spacer, VStack } from "@chakra-ui/react"
 import { ClipLoader } from "react-spinners"
-import React from "react"
+import React, { useContext, useEffect, useRef } from "react"
 import { FunnyTexts } from "../../FunnyTexts"
+import { StepProps } from "../TicketCreateMaster"
+import { Web3Context } from "../../../contexts/Web3Context"
 
-export const TicketCreating = ({ stepsAmount, setStepIndex }: StepProps) => {
+export const TicketCreating = ({ state, onNextClick }: StepProps) => {
+  const firstRenderRef = useRef(true)
+  const { createEvent } = useContext(Web3Context)
+
+  useEffect(() => {
+    // Hack for React 18 to prevent double effect fire
+    if (firstRenderRef.current) {
+      firstRenderRef.current = false
+      return
+    }
+    createEvent(state).then(() => onNextClick())
+  }, [createEvent, onNextClick, state])
+
   return (
     <Box position="relative">
       <Box

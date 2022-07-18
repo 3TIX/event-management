@@ -5,9 +5,9 @@ import { theme } from "./theme"
 import { CreateTickets } from "./pages/CreateTickets"
 
 export const App = () => (
-  <ChakraProvider theme={theme}>
-    <Web3ContextProvider>
+  <Web3ContextProvider>
+    <ChakraProvider theme={theme}>
       <CreateTickets />
-    </Web3ContextProvider>
-  </ChakraProvider>
+    </ChakraProvider>
+  </Web3ContextProvider>
 )
