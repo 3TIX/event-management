@@ -32,6 +32,8 @@ dependencies {
     implementation "org.flywaydb:flyway-core:$flywayVersion"
     implementation "org.jooq:jooq:$jooqVersion"
 
+    implementation "com.google.guava:guava:$guavaVersion"
+
     testImplementation "org.assertj:assertj-core:$assertjVersion"
 
     testImplementation "org.junit.jupiter:junit-jupiter-api:$junitVersion"

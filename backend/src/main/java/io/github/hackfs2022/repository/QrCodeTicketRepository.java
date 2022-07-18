@@ -14,6 +14,8 @@ import java.util.UUID;
 
 import static io.github.hackfs2022.db.schema.Tables.QR_CODE_TICKETS;
 import static io.github.hackfs2022.model.QrCodeTicket.Builder.qrCodeTicket;
+import static java.util.Optional.empty;
+import static org.jooq.impl.DSL.max;
 
 public class QrCodeTicketRepository {
 
@@ -35,15 +37,47 @@ public class QrCodeTicketRepository {
     }
 
     public QrCodeTicket get(UUID id) {
+        final var result = find(id);
+        if (result.isEmpty()) {
+            throw new IllegalArgumentException(String.format("QrCodeTicket[id=%s] is not found", id));
+        }
+
+        return result.get();
+    }
+
+    public Optional<QrCodeTicket> find(UUID id) {
         final var result = db.selectFrom(QR_CODE_TICKETS)
             .where(QR_CODE_TICKETS.ID.equal(id))
             .fetchOne();
         if (result == null) {
-            throw new IllegalArgumentException(String.format("QrCodeTicket[id=%s] is not found", id));
+            return empty();
         }
 
-        return fromRecord(result);
+        return Optional.of(fromRecord(result));
+    }
 
+    public QrCodeTicket update(QrCodeTicket ticket) {
+        final var result = db.update(QR_CODE_TICKETS)
+            .set(toRecord(ticket))
+            .where(QR_CODE_TICKETS.ID.equal(ticket.id))
+            .execute();
+        if (result == 0) {
+            throw new IllegalStateException(String.format("QrCodeTicket[id=%s] is not updated", ticket.id));
+        }
+
+        return get(ticket.id);
+    }
+
+    public Optional<Integer> getLastProcessedBlock() {
+        final var maxBlockNumber = max(QR_CODE_TICKETS.BLOCK_NUMBER);
+        final var result = db.select(maxBlockNumber)
+            .from(QR_CODE_TICKETS)
+            .fetchOne(maxBlockNumber);
+
+        if (result == null) {
+            return empty();
+        }
+        return Optional.of(result);
     }
 
     private QrCodeTicketsRecord toRecord(QrCodeTicket ticket) {
@@ -56,6 +90,7 @@ public class QrCodeTicketRepository {
             ticket.validationCode,
             ticket.contractAddress.orElse(null),
             ticket.tokenId.orElse(null),
+            ticket.blockNumber.orElse(null),
             ticket.verificationDate.orElse(null));
     }
 
@@ -69,6 +104,7 @@ public class QrCodeTicketRepository {
             .validationCode(record.getValidationCode())
             .contractAddress(Optional.ofNullable(record.getContractAddress()))
             .tokenId(Optional.ofNullable(record.getTokenId()))
+            .blockNumber(Optional.ofNullable(record.getBlockNumber()))
             .verificationDate(Optional.ofNullable(record.getVerificationDate()))
             .build();
     }
