@@ -22,7 +22,7 @@ describe("EventManager", async () => {
             const cid = ethers.utils.toUtf8Bytes("QmZkMq9PCMPbzu54recZKjr54qm4gVJJ8TnRjqP7Q4SBsA");
 
             // then
-            await expect(eventManagerContract.createEvent("some name", "someURI", cid, 10, 100, {value: ethers.utils.parseEther("0.01")}))
+            await expect(eventManagerContract.createEvent("some name", "EVNT", "someURI", 10, {value: ethers.utils.parseEther("0.01")}))
                 .revertedWith("too small fee");
         });
         it("Should perform new event creation and emit event", async () => {
@@ -31,29 +31,26 @@ describe("EventManager", async () => {
             const eventManagerContract = await contract.deploy() as EventManager;
             const [requestor] = await ethers.getSigners();
 
-            const cid = ethers.utils.hexlify(ethers.utils.toUtf8Bytes("QmZkMq9PCMPbzu54recZKjr54qm4gVJJ8TnRjqP7Q4SBsA"));
             const eventName = "some name";
-            const imageURI = "someURI";
+            const eventSymbol = "EVNT";
+            const eventURI = "someURI";
             const ticketsTotal = 100;
-            const toDate = 123456;
 
             // when
-            const transaction = await eventManagerContract.createEvent(eventName, imageURI, cid, ticketsTotal, toDate, {value: ethers.utils.parseEther("0.1")});
+            const transaction = await eventManagerContract.createEvent(eventName, eventSymbol, eventURI, ticketsTotal, {value: ethers.utils.parseEther("0.1")});
 
             // then
             const eventAddress = await eventManagerContract.createdEvents(0);
             await expect(transaction).to.emit(eventManagerContract, 'EventCreated')
-                .withArgs(eventAddress);
+                .withArgs(eventAddress, eventURI);
 
             const eventContract = await ethers.getContractAt("EventNFT", eventAddress) as EventNFT;
             expect(await eventContract.eventOwner()).to.be.equal(requestor.address);
             expect(await eventContract.mintedCount()).to.be.equal(0);
             expect(await eventContract.maxTokens()).to.be.equal(ticketsTotal);
-            expect(await eventContract.commonTokenURI()).to.be.equal(imageURI);
-            expect(await eventContract.cid()).to.be.equal(cid);
-            expect(await eventContract.endDate()).to.be.equal(toDate);
+            expect(await eventContract.commonTokenURI()).to.be.equal(eventURI);
             expect(await eventContract.name()).to.be.equal(eventName);
-            expect(await eventContract.symbol()).to.be.equal("EVNT1");
+            expect(await eventContract.symbol()).to.be.equal("EVNT");
         });
     });
     describe("Ticket buy", async () => {
@@ -63,12 +60,11 @@ describe("EventManager", async () => {
             const eventManagerContract = await contract.deploy() as EventManager;
             const [requestor] = await ethers.getSigners();
 
-            const cid = ethers.utils.hexlify(ethers.utils.toUtf8Bytes("QmZkMq9PCMPbzu54recZKjr54qm4gVJJ8TnRjqP7Q4SBsA"));
             const eventName = "some name";
-            const imageURI = "someURI";
+            const eventSymbol = "EVNT";
+            const eventURI = "someURI";
             const ticketsTotal = 100;
-            const toDate = 123456;
-            await eventManagerContract.createEvent(eventName, imageURI, cid, ticketsTotal, toDate, {value: ethers.utils.parseEther("0.1")});
+            await eventManagerContract.createEvent(eventName, eventSymbol, eventURI, ticketsTotal, {value: ethers.utils.parseEther("0.1")});
             const eventAddress = await eventManagerContract.createdEvents(0);
             const eventContract = await ethers.getContractAt("EventNFT", eventAddress) as EventNFT;
 
@@ -84,12 +80,11 @@ describe("EventManager", async () => {
             const contract = await ethers.getContractFactory("EventManager");
             const eventManagerContract = await contract.deploy() as EventManager;
 
-            const cid = ethers.utils.hexlify(ethers.utils.toUtf8Bytes("QmZkMq9PCMPbzu54recZKjr54qm4gVJJ8TnRjqP7Q4SBsA"));
             const eventName = "some name";
-            const imageURI = "someURI";
+            const eventSymbol = "EVNT";
+            const eventURI = "someURI";
             const ticketsTotal = 1;
-            const toDate = 123456;
-            await eventManagerContract.createEvent(eventName, imageURI, cid, ticketsTotal, toDate, {value: ethers.utils.parseEther("0.1")});
+            await eventManagerContract.createEvent(eventName, eventSymbol, eventURI, ticketsTotal, {value: ethers.utils.parseEther("0.1")});
             const eventAddress = await eventManagerContract.createdEvents(0);
             await eventManagerContract.buyTicket(eventAddress);
 
@@ -103,13 +98,12 @@ describe("EventManager", async () => {
             // given
             const contract = await ethers.getContractFactory("EventManager");
             const eventManagerContract = await contract.deploy() as EventManager;
-            const cid = ethers.utils.hexlify(ethers.utils.toUtf8Bytes("QmZkMq9PCMPbzu54recZKjr54qm4gVJJ8TnRjqP7Q4SBsA"));
             const eventName = "some name";
-            const imageURI = "someURI";
-            const ticketsTotal = 1;
-            const toDate = 123456;
+            const eventSymbol = "EVNT";
+            const eventURI = "someURI";
+            const ticketsTotal = 100;
             const qrId = "someIdString";
-            await eventManagerContract.createEvent(eventName, imageURI, cid, ticketsTotal, toDate, {value: ethers.utils.parseEther("0.1")});
+            await eventManagerContract.createEvent(eventName, eventSymbol, eventURI, ticketsTotal, {value: ethers.utils.parseEther("0.1")});
             const eventAddress = await eventManagerContract.createdEvents(0);
             await eventManagerContract.buyTicket(eventAddress);
 
@@ -124,13 +118,12 @@ describe("EventManager", async () => {
             // given
             const contract = await ethers.getContractFactory("EventManager");
             const eventManagerContract = await contract.deploy() as EventManager;
-            const cid = ethers.utils.hexlify(ethers.utils.toUtf8Bytes("QmZkMq9PCMPbzu54recZKjr54qm4gVJJ8TnRjqP7Q4SBsA"));
             const eventName = "some name";
-            const imageURI = "someURI";
-            const ticketsTotal = 1;
-            const toDate = 123456;
+            const eventSymbol = "EVNT";
+            const eventURI = "someURI";
+            const ticketsTotal = 100;
             const qrId = "someIdString";
-            await eventManagerContract.createEvent(eventName, imageURI, cid, ticketsTotal, toDate, {value: ethers.utils.parseEther("0.1")});
+            await eventManagerContract.createEvent(eventName, eventSymbol, eventURI, ticketsTotal, {value: ethers.utils.parseEther("0.1")});
             const eventAddress = await eventManagerContract.createdEvents(0);
             await eventManagerContract.buyTicket(eventAddress);
 

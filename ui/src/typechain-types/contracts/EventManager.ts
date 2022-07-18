@@ -32,7 +32,7 @@ export interface EventManagerInterface extends utils.Interface {
   functions: {
     "buyTicket(address)": FunctionFragment;
     "claimQrCode(address,uint16,string)": FunctionFragment;
-    "createEvent(string,string,bytes,uint16,uint256)": FunctionFragment;
+    "createEvent(string,string,string,uint16)": FunctionFragment;
     "createdEvents(uint256)": FunctionFragment;
     "fee()": FunctionFragment;
     "owner()": FunctionFragment;
@@ -67,8 +67,7 @@ export interface EventManagerInterface extends utils.Interface {
     values: [
       PromiseOrValue<string>,
       PromiseOrValue<string>,
-      PromiseOrValue<BytesLike>,
-      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<string>,
       PromiseOrValue<BigNumberish>
     ]
   ): string;
@@ -98,7 +97,7 @@ export interface EventManagerInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "withdraw", data: BytesLike): Result;
 
   events: {
-    "EventCreated(address)": EventFragment;
+    "EventCreated(address,string)": EventFragment;
     "QrCodeClaimed(address,uint16,string)": EventFragment;
   };
 
@@ -108,8 +107,12 @@ export interface EventManagerInterface extends utils.Interface {
 
 export interface EventCreatedEventObject {
   eventAddress: string;
+  eventURI: string;
 }
-export type EventCreatedEvent = TypedEvent<[string], EventCreatedEventObject>;
+export type EventCreatedEvent = TypedEvent<
+  [string, string],
+  EventCreatedEventObject
+>;
 
 export type EventCreatedEventFilter = TypedEventFilter<EventCreatedEvent>;
 
@@ -166,10 +169,9 @@ export interface EventManager extends BaseContract {
 
     createEvent(
       eventName: PromiseOrValue<string>,
-      imageURI: PromiseOrValue<string>,
-      cid: PromiseOrValue<BytesLike>,
+      eventSymbol: PromiseOrValue<string>,
+      eventURI: PromiseOrValue<string>,
       ticketsTotal: PromiseOrValue<BigNumberish>,
-      endDate: PromiseOrValue<BigNumberish>,
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -201,10 +203,9 @@ export interface EventManager extends BaseContract {
 
   createEvent(
     eventName: PromiseOrValue<string>,
-    imageURI: PromiseOrValue<string>,
-    cid: PromiseOrValue<BytesLike>,
+    eventSymbol: PromiseOrValue<string>,
+    eventURI: PromiseOrValue<string>,
     ticketsTotal: PromiseOrValue<BigNumberish>,
-    endDate: PromiseOrValue<BigNumberish>,
     overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -236,10 +237,9 @@ export interface EventManager extends BaseContract {
 
     createEvent(
       eventName: PromiseOrValue<string>,
-      imageURI: PromiseOrValue<string>,
-      cid: PromiseOrValue<BytesLike>,
+      eventSymbol: PromiseOrValue<string>,
+      eventURI: PromiseOrValue<string>,
       ticketsTotal: PromiseOrValue<BigNumberish>,
-      endDate: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -256,8 +256,11 @@ export interface EventManager extends BaseContract {
   };
 
   filters: {
-    "EventCreated(address)"(eventAddress?: null): EventCreatedEventFilter;
-    EventCreated(eventAddress?: null): EventCreatedEventFilter;
+    "EventCreated(address,string)"(
+      eventAddress?: null,
+      eventURI?: null
+    ): EventCreatedEventFilter;
+    EventCreated(eventAddress?: null, eventURI?: null): EventCreatedEventFilter;
 
     "QrCodeClaimed(address,uint16,string)"(
       eventAddress?: null,
@@ -286,10 +289,9 @@ export interface EventManager extends BaseContract {
 
     createEvent(
       eventName: PromiseOrValue<string>,
-      imageURI: PromiseOrValue<string>,
-      cid: PromiseOrValue<BytesLike>,
+      eventSymbol: PromiseOrValue<string>,
+      eventURI: PromiseOrValue<string>,
       ticketsTotal: PromiseOrValue<BigNumberish>,
-      endDate: PromiseOrValue<BigNumberish>,
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -322,10 +324,9 @@ export interface EventManager extends BaseContract {
 
     createEvent(
       eventName: PromiseOrValue<string>,
-      imageURI: PromiseOrValue<string>,
-      cid: PromiseOrValue<BytesLike>,
+      eventSymbol: PromiseOrValue<string>,
+      eventURI: PromiseOrValue<string>,
       ticketsTotal: PromiseOrValue<BigNumberish>,
-      endDate: PromiseOrValue<BigNumberish>,
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
