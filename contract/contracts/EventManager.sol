@@ -1,6 +1,8 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/utils/Strings.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+
 
 import "./EventNFT.sol";
 
@@ -30,12 +32,21 @@ contract EventManager {
     function createEvent(string calldata eventName, string calldata eventSymbol, string calldata eventURI, uint16 ticketsTotal, address currency, uint256 price) public payable {
         require(msg.value >= fee, "too small fee");
         require(supportedCurrencies[currency], "not supported currency");
-        EventNFT newEvent = new EventNFT(msg.sender, eventName, eventSymbol, eventURI, ticketsTotal, currency, price);
+        EventNFT newEvent = new EventNFT(payable(msg.sender), eventName, eventSymbol, eventURI, ticketsTotal, currency, price);
         emit EventCreated(address(newEvent), eventURI);
     }
 
     function buyTicket(address eventAddress) public payable returns (uint16) {
         EventNFT eventNftContract = EventNFT(eventAddress);
+        if (eventNftContract.currency() == address(0)) {
+            require(msg.value >= eventNftContract.price(), "too small amount");
+            eventNftContract.eventOwner().transfer(msg.value);
+        } else {
+            IERC20 token = IERC20(eventNftContract.currency());
+            uint256 allowance = token.allowance(msg.sender, address(this));
+            require(allowance >= eventNftContract.price(), "too small amount");
+            token.transferFrom(msg.sender, eventNftContract.eventOwner(), eventNftContract.price());
+        }
         return eventNftContract.mintToken(msg.sender);
     }
 
