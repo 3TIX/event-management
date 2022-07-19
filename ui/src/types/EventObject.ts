@@ -1,21 +1,29 @@
-export type EventObject = {
+type CommonEventObject = {
   name: string
   description: string
   image: string
-  symbol: string
   isOnline: boolean
   location: string
   startDate: string
   endDate: string
   organiserEmail: string
-  ticketCount: number
-  ticketPrice: number
   ticketCurrency: string
   royaltyPercentage: number
   distributePoaps: boolean
 }
 
-export type EventCreationObject = EventObject & {
+export type EventObject = CommonEventObject & {
+  symbol: string
+  ticketCount: number
+  ticketPrice: number
+}
+
+export type EventListingObject = CommonEventObject & {
+  id: string
+  cid: string
+  creatorAddress: string
   startDate: string
   endDate: string
+  ticketCount: string
+  ticketPrice: string
 }

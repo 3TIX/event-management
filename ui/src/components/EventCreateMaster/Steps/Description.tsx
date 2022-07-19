@@ -2,7 +2,7 @@ import React, { useCallback, useEffect } from "react"
 import { Image, Text, Textarea, VStack, Flex } from "@chakra-ui/react"
 import { MasterField } from "../../MasterField"
 import ReactImageUploading, { ImageListType } from "react-images-uploading"
-import { StepProps } from "../TicketCreateMaster"
+import { StepProps } from "../EventCreateMaster"
 import { NextButton } from "../NextButton"
 
 export const Description = ({ state, dispatch, onNextClick }: StepProps) => {

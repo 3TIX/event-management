@@ -1,6 +1,6 @@
 import { Box, HStack, Input, Text, VStack } from "@chakra-ui/react"
 import { MasterField } from "../../MasterField"
-import { StepProps } from "../TicketCreateMaster"
+import { StepProps } from "../EventCreateMaster"
 import React, { FormEvent, useCallback } from "react"
 import { NextButton } from "../NextButton"
 

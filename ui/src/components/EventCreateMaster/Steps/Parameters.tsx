@@ -8,12 +8,13 @@ import {
   Flex,
 } from "@chakra-ui/react"
 import { MasterField } from "../../MasterField"
-import { StepProps } from "../TicketCreateMaster"
+import { StepProps } from "../EventCreateMaster"
 import React, { useCallback, useContext } from "react"
 import { Web3Context } from "../../../contexts/Web3Context"
 import { Web3Connect } from "../../Web3Connect"
 import { NextButton } from "../NextButton"
 import { RocketTicket } from "../../Icon"
+import { CURRENCIES } from "../../../utils/constants"
 
 export const Parameters = ({ state, dispatch, onNextClick }: StepProps) => {
   const { account } = useContext(Web3Context)
@@ -87,18 +88,13 @@ export const Parameters = ({ state, dispatch, onNextClick }: StepProps) => {
             name="ticketCurrency"
             value={state.ticketCurrency}
             onChange={handleChange}
-            placeholder="Select option"
             variant="unstyled"
           >
-            <option value="0x0000000000000000000000000000000000000000">
-              MATIC
-            </option>
-            <option value="0x2d7882bedcbfddce29ba99965dd3cdf7fcb10a1e">
-              TST
-            </option>
-            <option value="0x326c977e6efc84e512bb9c30f76e30c160ed06fb">
-              LINK
-            </option>
+            {Object.entries(CURRENCIES).map(([value, label]) => (
+              <option key={label} style={{ color: "black" }} value={value}>
+                {label}
+              </option>
+            ))}
           </Select>
         </MasterField>
         <MasterField title="Loyalty percentage">

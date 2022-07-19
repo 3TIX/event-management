@@ -1,0 +1,9 @@
+export const CURRENCIES: Record<string, string> = {
+  "0x0000000000000000000000000000000000000000": "MATIC",
+  "0x2d7882bedcbfddce29ba99965dd3cdf7fcb10a1e": "TST",
+  "0x326c977e6efc84e512bb9c30f76e30c160ed06fb": "LINK",
+  "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2": "WETH",
+}
+
+//export const ADDRESS = "0xaC59eD0ec56126ED4967480055CB09bbCE5E4AD8"
+export const ADDRESS = "0x0cC1Bed932a5CffBcc5cb3e6A531633Ec04d68c5"

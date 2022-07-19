@@ -6,6 +6,7 @@ export const theme = extendTheme({
     global: {
       "html,body": {
         color: "white",
+        overflowX: "hidden",
       },
     },
   },

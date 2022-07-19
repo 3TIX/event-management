@@ -9,17 +9,26 @@ import {
   Spacer,
   Button,
   useDisclosure,
+  Box,
 } from "@chakra-ui/react"
 import { QRTicket } from "./QRTicket"
 import { CreateTicketsBar } from "./CreateTicketsBar"
-import { TicketCreateMaster } from "../../components/TicketCreateMaster"
+import { EventCreateMaster } from "../../components/EventCreateMaster"
+import { useQuery } from "@apollo/client"
+import { EventsQuery } from "../../graphql"
+import { useEffect } from "react"
+import { ScreenScroller } from "../../components/ScreenScroller/ScreenScroller"
+import * as React from "react"
 
 export const CreateTickets = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const { data } = useQuery(EventsQuery)
+  useEffect(() => {
+    console.log(data)
+  }, [data])
   return (
-    <>
-      <FixedPageBackground />
-      <TicketCreateMaster isOpen={isOpen} onClose={onClose} />
+    <Box width="100vw" height="100vh" bgColor="black" position="relative">
+      <EventCreateMaster isOpen={isOpen} onClose={onClose} />
       <Header />
       <Container maxW="container.xl" mt={36}>
         <Flex px={40} paddingX={4}>
@@ -39,6 +48,7 @@ export const CreateTickets = () => {
           <QRTicket />
         </Flex>
       </Container>
-    </>
+      <ScreenScroller />
+    </Box>
   )
 }
