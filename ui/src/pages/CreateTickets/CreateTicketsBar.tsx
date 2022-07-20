@@ -1,12 +1,4 @@
-import {
-  Box,
-  StackDivider,
-  HStack,
-  Input,
-  Button,
-  Flex,
-  type BoxProps,
-} from "@chakra-ui/react"
+import { Button, type BoxProps } from "@chakra-ui/react"
 import { RocketTicket } from "../../components/Icon"
 
 type CreateTicketsBarProps = {

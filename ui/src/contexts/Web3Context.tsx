@@ -30,9 +30,12 @@ export const Web3ContextProvider = ({ children }: PropsWithChildren) => {
 
   const createEvent = useCallback(
     async (json: EventObject) => {
-      const copy = Object.assign({}, json)
+      const copy: Record<string, any> = Object.assign({}, json)
       copy.startDate = String(new Date(copy.startDate).valueOf() / 1000)
       copy.endDate = String(new Date(copy.endDate).valueOf() / 1000)
+      copy.ticketPrice = utils
+        .parseEther(copy.ticketPrice.toString())
+        .toString()
       const symbol = copy.symbol || "SYMB"
       delete copy.symbol
       const cid = await uploadJSON(copy)

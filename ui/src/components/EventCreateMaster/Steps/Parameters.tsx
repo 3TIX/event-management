@@ -1,10 +1,7 @@
 import {
   Input,
   VStack,
-  Switch,
-  FormLabel,
   Spacer,
-  Flex,
   Menu,
   MenuButton,
   MenuList,
@@ -14,16 +11,12 @@ import {
 } from "@chakra-ui/react"
 import { MasterField } from "../../MasterField"
 import { StepProps } from "../EventCreateMaster"
-import React, { useCallback, useContext } from "react"
-import { Web3Context } from "../../../contexts/Web3Context"
-import { Web3Connect } from "../../Web3Connect"
+import React, { useCallback } from "react"
 import { NextButton } from "../NextButton"
-import { ArrowRight, RocketTicket } from "../../Icon"
+import { ArrowRight } from "../../Icon"
 import { ChevronDownIcon } from "@chakra-ui/icons"
 
 export const Parameters = ({ state, dispatch, onNextClick }: StepProps) => {
-  const { account } = useContext(Web3Context)
-
   const handleChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       dispatch({ fieldName: event.target.name, value: event.target.value })

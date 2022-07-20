@@ -1,12 +1,5 @@
 import { EventListingObject } from "../../types/EventObject"
-import {
-  AspectRatio,
-  Box,
-  Button,
-  Container,
-  Text,
-  VStack,
-} from "@chakra-ui/react"
+import { AspectRatio, Box, Button, Text, VStack } from "@chakra-ui/react"
 import { Calendar, MapPin } from "../Icon"
 import { CURRENCIES } from "../../utils/constants"
 import { Web3Connect } from "../Web3Connect"

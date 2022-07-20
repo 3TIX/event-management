@@ -1,4 +1,4 @@
-import { Button, Container, Flex } from "@chakra-ui/react"
+import { Container, Flex } from "@chakra-ui/react"
 import { Icon } from "../Icon"
 import { Web3Connect } from "../Web3Connect"
 

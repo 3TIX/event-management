@@ -6,7 +6,6 @@ import {
   Text,
   Container,
   Spacer,
-  Button,
   useDisclosure,
   Box,
 } from "@chakra-ui/react"

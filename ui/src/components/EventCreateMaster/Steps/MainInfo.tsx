@@ -1,19 +1,16 @@
 import {
-  Box,
   Button,
-  HStack,
   Input,
   Menu,
   MenuButton,
   MenuItem,
   MenuList,
   Spacer,
-  Text,
   VStack,
 } from "@chakra-ui/react"
 import { MasterField } from "../../MasterField"
 import { StepProps } from "../EventCreateMaster"
-import React, { FormEvent, useCallback } from "react"
+import React, { useCallback } from "react"
 import { NextButton } from "../NextButton"
 import { ChevronDownIcon } from "@chakra-ui/icons"
 import { CURRENCIES } from "../../../utils/constants"
