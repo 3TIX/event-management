@@ -14,10 +14,10 @@ type CreatedEvent @entity(immutable: true) {
     image: String!
     isOnline: Boolean!
     location: String!
-    startDate: String!
-    endDate: String!
+    startDate: Int!
+    endDate: Int!
     organiserEmail: String!
-    ticketCount: BigInt!
+    ticketCount: Int!
     ticketPrice: String!
     ticketCurrency: Bytes!
     royaltyPercentage: Int!
