@@ -1,11 +1,18 @@
 import { extendTheme } from "@chakra-ui/react"
 
 export const theme = extendTheme({
-  config: { useSystemColorMode: false },
+  config: { useSystemColorMode: false, colorMode: "dark" },
   styles: {
     global: {
       "html,body": {
         color: "white",
+        overflowX: "hidden",
+      },
+      ".clampedText": {
+        "-webkit-line-clamp": "3",
+        overflow: "hidden",
+        "-webkit-box-orient": "vertical",
+        display: "-webkit-box",
       },
     },
   },

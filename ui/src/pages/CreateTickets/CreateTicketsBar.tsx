@@ -1,12 +1,4 @@
-import {
-  Box,
-  StackDivider,
-  HStack,
-  Input,
-  Button,
-  Flex,
-  type BoxProps,
-} from "@chakra-ui/react"
+import { Button, type BoxProps } from "@chakra-ui/react"
 import { RocketTicket } from "../../components/Icon"
 
 type CreateTicketsBarProps = {
@@ -26,7 +18,7 @@ export const CreateTicketsBar = ({
       borderRadius="100px"
       mt={0}
       px={16}
-      rightIcon={<RocketTicket />}
+      rightIcon={<RocketTicket width="24px" height="24px" />}
     >
       Create tickets
     </Button>

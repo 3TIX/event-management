@@ -12,7 +12,6 @@ import { StepIndicator } from "../StepIndicator/StepIndicator"
 import { Description } from "./Steps/Description"
 import { BackButton } from "./BackButton"
 import { Parameters } from "./Steps/Parameters"
-import { WIP } from "./Steps/WIP"
 import { TicketCreating } from "./Steps/TicketCreating"
 import { Done } from "./Steps/Done"
 import { EventObject } from "../../types/EventObject"
@@ -33,7 +32,7 @@ export type TicketCreateMasterProps = {
   organiserEmail: "",
   ticketCount: 1000,
   ticketPrice: 100,
-  ticketCurrency: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+  ticketCurrency: "0x0000000000000000000000000000000000000000",
   royaltyPercentage: 1,
   distributePoaps: true,
 }*/
@@ -50,8 +49,8 @@ const initialState: EventObject = {
   endDate: new Date().toISOString().split("T")[0],
   organiserEmail: "info@ethglobal.com",
   ticketCount: 1000,
-  ticketPrice: 150,
-  ticketCurrency: "0x0000000000000000000000000000000000000000",
+  ticketPrice: 1.2,
+  ticketCurrency: "0x2e3b96150C4D14C07781956cE4779E2a92CA1B23",
   royaltyPercentage: 1,
   distributePoaps: true,
 }
@@ -66,18 +65,18 @@ export type StepProps = {
   state: typeof initialState
   dispatch: React.Dispatch<Action>
   onNextClick: () => void
+  onBackClick: () => void
 }
 
 const Steps: Array<React.ComponentType<StepProps>> = [
   MainInfo,
-  Description,
   Parameters,
-  // WIP,
+  Description,
   TicketCreating,
   Done,
 ]
 
-export const TicketCreateMaster = ({
+export const EventCreateMaster = ({
   isOpen,
   onClose,
 }: TicketCreateMasterProps) => {
@@ -94,10 +93,24 @@ export const TicketCreateMaster = ({
   }, [onClose])
 
   const onNextClick = useCallback(() => {
-    setStepIndex((currentIndex) => {
-      return currentIndex === Steps.length - 1 ? currentIndex : currentIndex + 1
-    })
-  }, [])
+    if (stepIndex === Steps.length - 1) {
+      onClose()
+    } else {
+      setStepIndex((currentIndex) => {
+        return currentIndex + 1
+      })
+    }
+  }, [onClose, stepIndex])
+
+  const onBackClick = useCallback(() => {
+    if (stepIndex === 0) {
+      onClose()
+    } else {
+      setStepIndex((currentIndex) => {
+        return currentIndex - 1
+      })
+    }
+  }, [onClose, stepIndex])
 
   return (
     <Modal isOpen={isOpen} onClose={onWizardClose} isCentered>
@@ -117,6 +130,7 @@ export const TicketCreateMaster = ({
             state={state}
             dispatch={dispatch}
             onNextClick={onNextClick}
+            onBackClick={onBackClick}
           />
         </ModalBody>
         <StepIndicator currentStep={stepIndex} stepsAmount={Steps.length} />

@@ -1,4 +1,3 @@
-import { FixedPageBackground } from "../../components/FixedPageBackground"
 import { Header } from "../../components/Header"
 import {
   Flex,
@@ -7,19 +6,20 @@ import {
   Text,
   Container,
   Spacer,
-  Button,
   useDisclosure,
+  Box,
 } from "@chakra-ui/react"
 import { QRTicket } from "./QRTicket"
 import { CreateTicketsBar } from "./CreateTicketsBar"
-import { TicketCreateMaster } from "../../components/TicketCreateMaster"
+import { EventCreateMaster } from "../../components/EventCreateMaster"
+import { ScreenScroller } from "../../components/ScreenScroller/ScreenScroller"
+import * as React from "react"
 
 export const CreateTickets = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   return (
-    <>
-      <FixedPageBackground />
-      <TicketCreateMaster isOpen={isOpen} onClose={onClose} />
+    <Box width="100vw" height="100vh" bgColor="black" position="relative">
+      <EventCreateMaster isOpen={isOpen} onClose={onClose} />
       <Header />
       <Container maxW="container.xl" mt={36}>
         <Flex px={40} paddingX={4}>
@@ -31,7 +31,6 @@ export const CreateTickets = () => {
               In the Metaverse or on planet earth, 3TIX makes it easy to create,
               send and manage tickets for any kind of event.
             </Text>
-            <Button variant="link">Learn more {">"}</Button>
             <Spacer flex={0.5} />
             <CreateTicketsBar onCreate={onOpen} />
           </VStack>
@@ -39,6 +38,7 @@ export const CreateTickets = () => {
           <QRTicket />
         </Flex>
       </Container>
-    </>
+      <ScreenScroller />
+    </Box>
   )
 }

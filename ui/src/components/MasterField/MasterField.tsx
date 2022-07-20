@@ -1,4 +1,4 @@
-import { Box, BoxProps, Text, VStack } from "@chakra-ui/react"
+import { Box, BoxProps, Flex, Text, VStack } from "@chakra-ui/react"
 
 export type MasterFieldProps = {
   title?: String
@@ -23,7 +23,7 @@ export const MasterField = ({
             {title}
           </Text>
         )}
-        {children}
+        <Flex width="100%">{children}</Flex>
       </VStack>
     </Box>
   )

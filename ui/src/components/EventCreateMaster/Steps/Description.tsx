@@ -1,11 +1,15 @@
-import React, { useCallback, useEffect } from "react"
+import React, { useCallback, useContext, useEffect } from "react"
 import { Image, Text, Textarea, VStack, Flex } from "@chakra-ui/react"
 import { MasterField } from "../../MasterField"
 import ReactImageUploading, { ImageListType } from "react-images-uploading"
-import { StepProps } from "../TicketCreateMaster"
+import { StepProps } from "../EventCreateMaster"
 import { NextButton } from "../NextButton"
+import { ImagePlaceholder, RocketTicket } from "../../Icon"
+import { Web3Connect } from "../../Web3Connect"
+import { Web3Context } from "../../../contexts/Web3Context"
 
 export const Description = ({ state, dispatch, onNextClick }: StepProps) => {
+  const { account } = useContext(Web3Context)
   const [images, setImages] = React.useState<ImageListType>(
     state.image ? [{ dataURL: state.image }] : []
   )
@@ -36,10 +40,11 @@ export const Description = ({ state, dispatch, onNextClick }: StepProps) => {
   )
   return (
     <form onSubmit={onSubmit}>
-      <VStack spacing="40px">
+      <VStack spacing={4}>
         <MasterField title="Description">
           <Textarea
             name="description"
+            height="180px"
             onChange={handleChange}
             value={state.description}
             variant="unstyled"
@@ -51,18 +56,23 @@ export const Description = ({ state, dispatch, onNextClick }: StepProps) => {
             {({ isDragging, dragProps, onImageUpload }) => {
               return images.length === 0 || isDragging ? (
                 <Flex
-                  height="300px"
+                  height="180px"
                   width="100%"
+                  flexDirection="column"
                   bgColor={isDragging ? "primary" : undefined}
                   alignItems="center"
                   justifyContent="center"
                   onClick={onImageUpload}
+                  cursor="pointer"
                   {...dragProps}
                 >
-                  <Text fontSize="xl" color={isDragging ? "black" : "primary"}>
-                    {isDragging
-                      ? "Drop in this area"
-                      : "Click to upload or drop image here"}
+                  <ImagePlaceholder width="64px" height="64px" opacity={0.5} />
+                  <Text
+                    fontSize="lg"
+                    color={isDragging ? "black" : "white"}
+                    mt={2}
+                  >
+                    {isDragging ? "Drop in this area" : "Add event image"}
                   </Text>
                 </Flex>
               ) : (
@@ -80,8 +90,13 @@ export const Description = ({ state, dispatch, onNextClick }: StepProps) => {
             }}
           </ReactImageUploading>
         </MasterField>
-
-        <NextButton />
+        {account ? (
+          <NextButton rightIcon={<RocketTicket width="24px" height="24px" />}>
+            Create tickets
+          </NextButton>
+        ) : (
+          <Web3Connect variant="solid" width="100%" color="black" />
+        )}
       </VStack>
     </form>
   )
