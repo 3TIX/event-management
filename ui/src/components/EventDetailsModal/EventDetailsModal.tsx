@@ -1,5 +1,6 @@
 import { EventListingObject } from "../../types/EventObject"
 import {
+  Box,
   HStack,
   Image,
   Modal,
@@ -39,10 +40,14 @@ const Content = ({
     case !isPurchasing && !purchasedSuccessfully:
       return <EventDisplay event={event} purchaseTicket={purchaseTicket} />
     case isPurchasing:
-      return <LoadingScreen />
+      return (
+        <Box p={6}>
+          <LoadingScreen />
+        </Box>
+      )
     case purchasedSuccessfully:
       return (
-        <VStack spacing="40px">
+        <VStack spacing="40px" p={6}>
           <Image src="assets/TicketFull.png" width="70%" />
           <HStack bgColor="primary.5" px={4} borderRadius="12px">
             <Text fontSize="3xl">1</Text>
@@ -84,16 +89,10 @@ export const EventDetailsModal = ({
     return null
   }
   return (
-    <Modal isOpen={isOpen} onClose={onModalClose}>
+    <Modal isOpen={isOpen} onClose={onModalClose} isCentered>
       <ModalOverlay backdropFilter="blur(7px)" />
-      <ModalContent
-        bgColor="modalBg"
-        borderRadius="32px"
-        py={4}
-        minHeight="60vh"
-      >
-        <ModalCloseButton />
-        <ModalBody mt={8} mb={2} display="flex" flexDirection="column">
+      <ModalContent bgColor="modalBg" borderRadius="32px" minHeight="60vh">
+        <ModalBody mb={2} p={0} display="flex" flexDirection="column">
           <Content
             event={event}
             purchaseTicket={purchaseTicket}

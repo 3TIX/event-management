@@ -3,7 +3,11 @@ import { StepProps } from "../EventCreateMaster"
 import { Web3Context } from "../../../contexts/Web3Context"
 import { LoadingScreen } from "../../LoadingScreen"
 
-export const TicketCreating = ({ state, onNextClick }: StepProps) => {
+export const TicketCreating = ({
+  state,
+  onNextClick,
+  onBackClick,
+}: StepProps) => {
   const firstRenderRef = useRef(true)
   const { createEvent } = useContext(Web3Context)
 
@@ -13,8 +17,10 @@ export const TicketCreating = ({ state, onNextClick }: StepProps) => {
       firstRenderRef.current = false
       return
     }
-    createEvent(state).then(() => onNextClick())
-  }, [createEvent, onNextClick, state])
+    createEvent(state)
+      .then(() => onNextClick())
+      .catch(() => onBackClick())
+  }, [createEvent, onBackClick, onNextClick, state])
 
   return <LoadingScreen />
 }

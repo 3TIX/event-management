@@ -13,7 +13,7 @@ type CommonEventObject = {
 }
 
 export type EventObject = CommonEventObject & {
-  symbol: string
+  symbol?: string
   ticketCount: number
   ticketPrice: number
 }
@@ -22,8 +22,8 @@ export type EventListingObject = CommonEventObject & {
   id: string
   cid: string
   creatorAddress: string
-  startDate: string
-  endDate: string
-  ticketCount: string
+  startDate: number
+  endDate: number
+  ticketCount: number
   ticketPrice: string
 }

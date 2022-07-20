@@ -49,7 +49,9 @@ export const EventCard = ({ event, onGetTickets }: EventCardProps) => {
             <MapPin mr={1} mb={1} />
             {event.isOnline ? "Virtual" : "On-site"}
           </Text>
-          <Text pt={5}>{event.description}</Text>
+          <Text pt={5} className="clampedText">
+            {event.description}
+          </Text>
         </Container>
         <Container p={5}>
           <Button

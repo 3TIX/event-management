@@ -1,4 +1,5 @@
 import { ApolloClient, gql, InMemoryCache } from "@apollo/client"
+import { EventListingObject } from "../types/EventObject"
 
 export const EventsQuery = gql`
   query CreatedEvents {
@@ -23,7 +24,11 @@ export const EventsQuery = gql`
   }
 `
 
+export type CreatedEventsData = {
+  createdEvents: Array<EventListingObject>
+}
+
 export const client = new ApolloClient({
-  uri: "https://api.thegraph.com/subgraphs/name/hackfs2022/subgraph/graphql",
+  uri: "https://api.thegraph.com/subgraphs/name/hackfs2022/subgraph",
   cache: new InMemoryCache(),
 })

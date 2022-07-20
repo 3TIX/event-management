@@ -1,11 +1,16 @@
 import {
   Input,
   VStack,
-  Select,
   Switch,
   FormLabel,
   Spacer,
   Flex,
+  Menu,
+  MenuButton,
+  MenuList,
+  Button,
+  MenuItem,
+  HStack,
 } from "@chakra-ui/react"
 import { MasterField } from "../../MasterField"
 import { StepProps } from "../EventCreateMaster"
@@ -13,22 +18,22 @@ import React, { useCallback, useContext } from "react"
 import { Web3Context } from "../../../contexts/Web3Context"
 import { Web3Connect } from "../../Web3Connect"
 import { NextButton } from "../NextButton"
-import { RocketTicket } from "../../Icon"
-import { CURRENCIES } from "../../../utils/constants"
+import { ArrowRight, RocketTicket } from "../../Icon"
+import { ChevronDownIcon } from "@chakra-ui/icons"
 
 export const Parameters = ({ state, dispatch, onNextClick }: StepProps) => {
   const { account } = useContext(Web3Context)
 
   const handleChange = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    (event: React.ChangeEvent<HTMLInputElement>) => {
       dispatch({ fieldName: event.target.name, value: event.target.value })
     },
     [dispatch]
   )
 
-  const handleSwitchChange = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      dispatch({ fieldName: event.target.name, value: event.target.checked })
+  const handleIsOnlineSelect = useCallback(
+    (value: boolean) => {
+      dispatch({ fieldName: "isOnline", value })
     },
     [dispatch]
   )
@@ -42,21 +47,11 @@ export const Parameters = ({ state, dispatch, onNextClick }: StepProps) => {
   )
 
   return (
-    <form onSubmit={onSubmit}>
-      <VStack spacing="40px">
-        <MasterField>
-          <Flex width="100%">
-            <FormLabel htmlFor="isOnline" m={0}>
-              Is online
-            </FormLabel>
-            <Spacer />
-            <Switch
-              name="isOnline"
-              isChecked={state.isOnline}
-              onChange={handleSwitchChange}
-            />
-          </Flex>
-        </MasterField>
+    <form
+      onSubmit={onSubmit}
+      style={{ flex: 1, display: "flex", flexDirection: "column" }}
+    >
+      <VStack spacing={4} flex={1}>
         <MasterField title="Event symbol">
           <Input
             name="symbol"
@@ -65,55 +60,82 @@ export const Parameters = ({ state, dispatch, onNextClick }: StepProps) => {
             variant="unstyled"
           />
         </MasterField>
-        <MasterField title="Number of tickets">
+        <HStack alignSelf="stretch">
+          <MasterField title="Event starts" flex={1}>
+            <Input
+              onChange={handleChange}
+              name="startDate"
+              value={state.startDate}
+              mt={0}
+              size="sm"
+              variant="unstyled"
+              type="date"
+            />
+          </MasterField>
+          <ArrowRight />
+          <MasterField title="Event ends" flex={1}>
+            <Input
+              onChange={handleChange}
+              name="endDate"
+              value={state.endDate}
+              mt={0}
+              size="sm"
+              variant="unstyled"
+              type="date"
+            />
+          </MasterField>
+        </HStack>
+        <MasterField title="Event location">
+          <Menu>
+            <MenuButton
+              size="xs"
+              p={2}
+              colorScheme="transparent"
+              variant="ghost"
+              as={Button}
+              rightIcon={<ChevronDownIcon width="16px" height="16px" />}
+            >
+              {state.isOnline ? "Virtual" : "On-site"}
+            </MenuButton>
+            <MenuList bgColor="modalBg" border="none">
+              <MenuItem
+                _hover={{ bgColor: "black" }}
+                _focus={{ bgColor: "black" }}
+                onClick={() => handleIsOnlineSelect(true)}
+              >
+                Virtual
+              </MenuItem>
+              <MenuItem
+                _hover={{ bgColor: "black" }}
+                _focus={{ bgColor: "black" }}
+                onClick={() => handleIsOnlineSelect(false)}
+              >
+                On-site
+              </MenuItem>
+            </MenuList>
+          </Menu>
           <Input
-            name="ticketCount"
-            value={state.ticketCount}
+            flex={1}
             onChange={handleChange}
+            name="location"
+            value={state.location}
+            mt={0}
+            size="sm"
             variant="unstyled"
           />
         </MasterField>
-        <MasterField title="Ticket price">
+        <MasterField title="Contact email">
           <Input
-            name="ticketPrice"
-            value={state.ticketPrice}
             onChange={handleChange}
+            name="organiserEmail"
+            value={state.organiserEmail}
+            mt={0}
+            size="sm"
             variant="unstyled"
-            type="number"
-            step={0.01}
           />
         </MasterField>
-        <MasterField title="Ticket currency">
-          <Select
-            name="ticketCurrency"
-            value={state.ticketCurrency}
-            onChange={handleChange}
-            variant="unstyled"
-          >
-            {Object.entries(CURRENCIES).map(([value, label]) => (
-              <option key={label} style={{ color: "black" }} value={value}>
-                {label}
-              </option>
-            ))}
-          </Select>
-        </MasterField>
-        <MasterField title="Loyalty percentage">
-          <Input
-            name="royaltyPercentage"
-            value={state.royaltyPercentage}
-            onChange={handleChange}
-            variant="unstyled"
-            type="number"
-            max={100}
-            min={0}
-          />
-        </MasterField>
-
-        {account ? (
-          <NextButton rightIcon={<RocketTicket />}>Create tickets</NextButton>
-        ) : (
-          <Web3Connect variant="solid" width="100%" color="black" />
-        )}
+        <Spacer />
+        <NextButton />
       </VStack>
     </form>
   )

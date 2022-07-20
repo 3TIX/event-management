@@ -3,7 +3,7 @@ import { createContext, PropsWithChildren, useCallback, useState } from "react"
 import { EventManager__factory } from "../typechain-types"
 import { EventObject } from "../types/EventObject"
 import { uploadJSON } from "../utils/ipfsTools"
-import { ethers } from "ethers"
+import { utils } from "ethers"
 import { ADDRESS } from "../utils/constants"
 
 type Context = {
@@ -33,6 +33,8 @@ export const Web3ContextProvider = ({ children }: PropsWithChildren) => {
       const copy = Object.assign({}, json)
       copy.startDate = String(new Date(copy.startDate).valueOf() / 1000)
       copy.endDate = String(new Date(copy.endDate).valueOf() / 1000)
+      const symbol = copy.symbol || "SYMB"
+      delete copy.symbol
       const cid = await uploadJSON(copy)
 
       try {
@@ -42,12 +44,12 @@ export const Web3ContextProvider = ({ children }: PropsWithChildren) => {
         )
         const event = await connection.createEvent(
           copy.name,
-          copy.symbol,
+          symbol,
           `https://${cid}.ipfs.nftstorage.link`,
           copy.ticketCount,
           copy.ticketCurrency,
-          copy.ticketPrice,
-          { value: ethers.utils.parseEther("0.1") }
+          utils.parseEther(copy.ticketPrice.toString()),
+          { value: utils.parseEther("0.1") }
         )
         console.log(event)
       } catch (e) {

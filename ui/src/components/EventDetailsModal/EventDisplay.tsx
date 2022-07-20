@@ -12,6 +12,7 @@ import { CURRENCIES } from "../../utils/constants"
 import { Web3Connect } from "../Web3Connect"
 import React, { useContext } from "react"
 import { Web3Context } from "../../contexts/Web3Context"
+import { ethers } from "ethers"
 
 type EventDisplayProps = {
   event: EventListingObject
@@ -19,20 +20,26 @@ type EventDisplayProps = {
 }
 
 export const EventDisplay = ({ event, purchaseTicket }: EventDisplayProps) => {
-  const startDate = new Date(parseInt(event.startDate) * 1000)
-  const endDate = new Date(parseInt(event.endDate) * 1000)
+  const startDate = new Date(event.startDate * 1000)
+  const endDate = new Date(event.endDate * 1000)
   const { account } = useContext(Web3Context)
   return (
-    <VStack alignItems="flex-start">
-      <AspectRatio width="100%" ratio={2 / 1.2} mb={5}>
+    <VStack alignItems="flex-start" gap={5}>
+      <AspectRatio width="100%" ratio={1}>
         <Box
           bgImage={event.image}
           bgPosition="center"
           bgRepeat="no-repeat"
           bgSize="contain"
+          borderRadius="16px"
         />
       </AspectRatio>
-      <Container px={5}>
+      <Box
+        px={6}
+        maxHeight="150px"
+        overflowY="auto"
+        borderBottom="2px solid rgba(255, 255, 255, 0.2)"
+      >
         <Text fontSize="2xl" fontWeight={600}>
           {event.name}
         </Text>
@@ -47,13 +54,14 @@ export const EventDisplay = ({ event, purchaseTicket }: EventDisplayProps) => {
           {event.isOnline ? "Virtual" : "On-site"}
         </Text>
         <Text pt={5}>{event.description}</Text>
-      </Container>
-      <Container px={5}>
+      </Box>
+      <Box px={6}>
         <Text fontSize="2xl">
-          {event.ticketPrice} {CURRENCIES[event.ticketCurrency]}
+          {ethers.utils.formatEther(event.ticketPrice)}{" "}
+          {CURRENCIES[event.ticketCurrency]}
         </Text>
-      </Container>
-      <Container>
+      </Box>
+      <Box width="100%" px={6} pb={4}>
         {account ? (
           <Button
             color="black"
@@ -67,7 +75,7 @@ export const EventDisplay = ({ event, purchaseTicket }: EventDisplayProps) => {
         ) : (
           <Web3Connect variant="solid" width="100%" color="black" />
         )}
-      </Container>
+      </Box>
     </VStack>
   )
 }

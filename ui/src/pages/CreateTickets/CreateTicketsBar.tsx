@@ -26,7 +26,7 @@ export const CreateTicketsBar = ({
       borderRadius="100px"
       mt={0}
       px={16}
-      rightIcon={<RocketTicket />}
+      rightIcon={<RocketTicket width="24px" height="24px" />}
     >
       Create tickets
     </Button>

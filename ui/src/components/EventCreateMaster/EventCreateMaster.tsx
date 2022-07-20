@@ -65,12 +65,13 @@ export type StepProps = {
   state: typeof initialState
   dispatch: React.Dispatch<Action>
   onNextClick: () => void
+  onBackClick: () => void
 }
 
 const Steps: Array<React.ComponentType<StepProps>> = [
   MainInfo,
-  Description,
   Parameters,
+  Description,
   TicketCreating,
   Done,
 ]
@@ -101,6 +102,16 @@ export const EventCreateMaster = ({
     }
   }, [onClose, stepIndex])
 
+  const onBackClick = useCallback(() => {
+    if (stepIndex === 0) {
+      onClose()
+    } else {
+      setStepIndex((currentIndex) => {
+        return currentIndex - 1
+      })
+    }
+  }, [onClose, stepIndex])
+
   return (
     <Modal isOpen={isOpen} onClose={onWizardClose} isCentered>
       <ModalOverlay backdropFilter="blur(7px)" />
@@ -119,6 +130,7 @@ export const EventCreateMaster = ({
             state={state}
             dispatch={dispatch}
             onNextClick={onNextClick}
+            onBackClick={onBackClick}
           />
         </ModalBody>
         <StepIndicator currentStep={stepIndex} stepsAmount={Steps.length} />
