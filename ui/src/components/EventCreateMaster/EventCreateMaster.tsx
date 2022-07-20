@@ -50,7 +50,7 @@ const initialState: EventObject = {
   organiserEmail: "info@ethglobal.com",
   ticketCount: 1000,
   ticketPrice: 150,
-  ticketCurrency: "0x0000000000000000000000000000000000000000",
+  ticketCurrency: "0x2e3b96150C4D14C07781956cE4779E2a92CA1B23",
   royaltyPercentage: 1,
   distributePoaps: true,
 }
