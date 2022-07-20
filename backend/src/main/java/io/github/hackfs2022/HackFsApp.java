@@ -1,6 +1,7 @@
 package io.github.hackfs2022;
 
 import com.google.common.util.concurrent.ServiceManager;
+import io.github.hackfs2022.http.ExceptionHandler;
 import io.github.hackfs2022.http.QrCodeResource;
 import io.github.hackfs2022.job.QrCodeTicketDistributionJob;
 import io.github.hackfs2022.repository.QrCodeTicketRepository;
@@ -58,6 +59,7 @@ public class HackFsApp {
         });
         getRuntime().addShutdownHook(new Thread(javalin::stop));
         javalin.routes(new QrCodeResource(qrCodeTicketRepository).routes());
+        ExceptionHandler.register(javalin);
         javalin.start(8080);
 
         LOG.info("HackFS app started");

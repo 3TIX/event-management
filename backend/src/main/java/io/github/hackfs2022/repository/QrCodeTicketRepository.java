@@ -105,7 +105,7 @@ public class QrCodeTicketRepository {
             ticket.contractAddress.orElse(null),
             ticket.tokenId.orElse(null),
             ticket.blockNumber.orElse(null),
-            ticket.verificationDate.orElse(null));
+            ticket.validationTime.orElse(null));
     }
 
     private QrCodeTicket fromRecord(QrCodeTicketsRecord record) {
@@ -119,7 +119,7 @@ public class QrCodeTicketRepository {
             .contractAddress(Optional.ofNullable(record.getContractAddress()))
             .tokenId(Optional.ofNullable(record.getTokenId()))
             .blockNumber(Optional.ofNullable(record.getBlockNumber()))
-            .verificationDate(Optional.ofNullable(record.getVerificationDate()))
+            .validationTime(Optional.ofNullable(record.getVerificationDate()))
             .build();
     }
 }
