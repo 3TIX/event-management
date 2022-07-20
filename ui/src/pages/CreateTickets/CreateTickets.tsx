@@ -13,9 +13,32 @@ import {
 import { QRTicket } from "./QRTicket"
 import { CreateTicketsBar } from "./CreateTicketsBar"
 import { TicketCreateMaster } from "../../components/TicketCreateMaster"
+import { useEffect } from "react";
+import { gql, useQuery } from "@apollo/client";
+
+const query = gql`
+    query CreatedEvents {
+        createdEvents {
+            id
+            cid
+            creatorAddress
+            name
+            description
+        }
+    }
+`
 
 export const CreateTickets = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
+
+  const { loading, error, data } = useQuery(query)
+
+  useEffect(() => {
+    console.log("loading", loading)
+    console.log("error", error)
+    console.log("data", data)
+  }, [loading, error, data])
+
   return (
     <>
       <FixedPageBackground />
