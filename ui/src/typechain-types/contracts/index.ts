@@ -3,3 +3,4 @@
 /* eslint-disable */
 export type { EventManager } from "./EventManager";
 export type { EventNFT } from "./EventNFT";
+export type { SimpleToken } from "./SimpleToken";

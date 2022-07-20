@@ -3,3 +3,4 @@
 /* eslint-disable */
 export { EventManager__factory } from "./EventManager__factory";
 export { EventNFT__factory } from "./EventNFT__factory";
+export { SimpleToken__factory } from "./SimpleToken__factory";

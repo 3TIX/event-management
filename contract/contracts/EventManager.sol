@@ -1,6 +1,7 @@
 pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts/utils/Strings.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+
 
 import "./EventNFT.sol";
 
@@ -36,6 +37,13 @@ contract EventManager {
 
     function buyTicket(address eventAddress) public payable returns (uint16) {
         EventNFT eventNftContract = EventNFT(eventAddress);
+        if (eventNftContract.currency() == address(0)) {
+            require(msg.value >= eventNftContract.price(), "too small amount");
+            payable(eventNftContract.eventOwner()).transfer(msg.value);
+        } else {
+            IERC20 token = IERC20(eventNftContract.currency());
+            token.transferFrom(msg.sender, eventNftContract.eventOwner(), eventNftContract.price());
+        }
         return eventNftContract.mintToken(msg.sender);
     }
 
