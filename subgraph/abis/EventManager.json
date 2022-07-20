@@ -1,5 +1,15 @@
 [
-  { "inputs": [], "stateMutability": "nonpayable", "type": "constructor" },
+  {
+    "inputs": [
+      {
+        "internalType": "address[]",
+        "name": "_supportedCurrencies",
+        "type": "address[]"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
   {
     "anonymous": false,
     "inputs": [
@@ -46,18 +56,40 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "eventAddress", "type": "address" }
+      {
+        "internalType": "address",
+        "name": "eventAddress",
+        "type": "address"
+      }
     ],
     "name": "buyTicket",
-    "outputs": [{ "internalType": "uint16", "name": "", "type": "uint16" }],
+    "outputs": [
+      {
+        "internalType": "uint16",
+        "name": "",
+        "type": "uint16"
+      }
+    ],
     "stateMutability": "payable",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "eventAddress", "type": "address" },
-      { "internalType": "uint16", "name": "tokenId", "type": "uint16" },
-      { "internalType": "string", "name": "qrCodeId", "type": "string" }
+      {
+        "internalType": "address",
+        "name": "eventAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "uint16",
+        "name": "tokenId",
+        "type": "uint16"
+      },
+      {
+        "internalType": "string",
+        "name": "qrCodeId",
+        "type": "string"
+      }
     ],
     "name": "claimQrCode",
     "outputs": [],
@@ -66,10 +98,26 @@
   },
   {
     "inputs": [
-      { "internalType": "string", "name": "eventName", "type": "string" },
-      { "internalType": "string", "name": "eventSymbol", "type": "string" },
-      { "internalType": "string", "name": "eventURI", "type": "string" },
-      { "internalType": "uint16", "name": "ticketsTotal", "type": "uint16" }
+      {
+        "internalType": "string",
+        "name": "eventName",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "eventSymbol",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "eventURI",
+        "type": "string"
+      },
+      {
+        "internalType": "uint16",
+        "name": "ticketsTotal",
+        "type": "uint16"
+      }
     ],
     "name": "createEvent",
     "outputs": [],
@@ -77,16 +125,15 @@
     "type": "function"
   },
   {
-    "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "name": "createdEvents",
-    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [],
     "name": "fee",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
@@ -94,7 +141,30 @@
     "inputs": [],
     "name": "owner",
     "outputs": [
-      { "internalType": "address payable", "name": "", "type": "address" }
+      {
+        "internalType": "address payable",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "supportedCurrencies",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
     ],
     "stateMutability": "view",
     "type": "function"
