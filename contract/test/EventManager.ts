@@ -187,7 +187,7 @@ describe("EventManager", async () => {
             // then
             await simpleTokenContract.approve(eventManagerContract.address, ethers.utils.parseEther("0.5"))
             await expect(eventManagerContract.buyTicket(eventAddress))
-                .revertedWith("too small amount");
+                .revertedWith("ERC20: insufficient allowance");
         })
         it("Should fail to buy if sold out", async () => {
             // given

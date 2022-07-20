@@ -5,14 +5,14 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract EventNFT is ERC721URIStorage, Ownable {
 
-    address payable public eventOwner;
+    address public eventOwner;
     uint16 public mintedCount;
     uint16 public maxTokens;
     string public commonTokenURI;
     address public currency;
     uint256 public price;
 
-    constructor(address payable _eventOwner, string memory tokenName, string memory tokenSymbol, string memory _tokenURI, uint16 _maxTokens, address _currency, uint256 _price) ERC721(tokenName, tokenSymbol) {
+    constructor(address _eventOwner, string memory tokenName, string memory tokenSymbol, string memory _tokenURI, uint16 _maxTokens, address _currency, uint256 _price) ERC721(tokenName, tokenSymbol) {
         eventOwner = _eventOwner;
         commonTokenURI = _tokenURI;
         maxTokens = _maxTokens;
