@@ -1,6 +1,6 @@
-import { providers } from "ethers"
+import { ethers, providers } from "ethers"
 import { createContext, PropsWithChildren, useCallback, useState } from "react"
-import { EventManager__factory } from "../typechain-types"
+import { ERC20__factory, EventManager__factory } from "../typechain-types"
 import { EventObject } from "../types/EventObject"
 import { uploadJSON } from "../utils/ipfsTools"
 import { utils } from "ethers"
@@ -12,7 +12,11 @@ type Context = {
   account?: string
   setAccount: (account?: string) => void
   createEvent: (json: EventObject) => Promise<unknown>
-  buyTicket: (address: string) => Promise<unknown>
+  buyTicket: (
+    address: string,
+    price: string,
+    currency: string
+  ) => Promise<unknown>
 }
 
 export const Web3Context = createContext<Context>({
@@ -21,7 +25,8 @@ export const Web3Context = createContext<Context>({
   account: undefined,
   setAccount: (account) => {},
   createEvent: (json) => Promise.resolve(),
-  buyTicket: (address) => Promise.resolve(),
+  buyTicket: (address: string, price: string, currency: string) =>
+    Promise.resolve(),
 })
 
 export const Web3ContextProvider = ({ children }: PropsWithChildren) => {
@@ -64,13 +69,29 @@ export const Web3ContextProvider = ({ children }: PropsWithChildren) => {
   )
 
   const buyTicket = useCallback(
-    async (address: string) => {
+    async (address: string, price: string, currency: string) => {
+      const isNative = currency === "0x0000000000000000000000000000000000000000"
+      if (!isNative) {
+        try {
+          const connection = ERC20__factory.connect(
+            currency,
+            provider?.getSigner()!
+          )
+          await connection.approve(ADDRESS, price)
+        } catch (e) {
+          console.log("Failed to authorise amount, ", e)
+          throw e
+        }
+      }
       try {
         const connection = EventManager__factory.connect(
           ADDRESS,
           provider?.getSigner()!
         )
-        const ticketNFT = await connection.buyTicket(address)
+        const ticketNFT = await connection.buyTicket(
+          address,
+          isNative ? { value: price } : undefined
+        )
         console.log(ticketNFT)
       } catch (e) {
         console.log("Failed to purchase a ticket, ", e)

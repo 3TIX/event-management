@@ -9,7 +9,7 @@ import { ethers } from "ethers"
 
 type EventDisplayProps = {
   event: EventListingObject
-  purchaseTicket: (address: string) => void
+  purchaseTicket: (address: string, price: string, currency: string) => void
 }
 
 export const EventDisplay = ({ event, purchaseTicket }: EventDisplayProps) => {
@@ -62,7 +62,9 @@ export const EventDisplay = ({ event, purchaseTicket }: EventDisplayProps) => {
             colorScheme="primary"
             width="100%"
             borderRadius="100px"
-            onClick={() => purchaseTicket(event.id)}
+            onClick={() =>
+              purchaseTicket(event.id, event.ticketPrice, event.ticketCurrency)
+            }
           >
             Get ticket
           </Button>

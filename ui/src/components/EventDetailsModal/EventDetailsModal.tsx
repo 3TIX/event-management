@@ -25,7 +25,7 @@ type EventDetailsModalProps = {
 type ContentProps = {
   isPurchasing: boolean
   purchasedSuccessfully: boolean
-  purchaseTicket: (address: string) => void
+  purchaseTicket: (address: string, price: string, currency: string) => void
   event: EventListingObject
 }
 
@@ -75,9 +75,9 @@ export const EventDetailsModal = ({
   }, [onClose])
 
   const purchaseTicket = useCallback(
-    (address: string) => {
+    (address: string, price: string, currency: string) => {
       setIsPurchasing(true)
-      buyTicket(address)
+      buyTicket(address, price, currency)
         .then(() => setPurchasedSuccessfully(true))
         .finally(() => setIsPurchasing(false))
     },
