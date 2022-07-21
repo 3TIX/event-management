@@ -6,4 +6,4 @@ export const CURRENCIES: Record<string, string> = {
   "0x2e3b96150c4d14c07781956ce4779e2a92ca1b23": "HFS2022",
 }
 
-export const ADDRESS = "0xEafE6CDf15cFE7E2E20B0ce68382FF67f5AA43b8"
+export const ADDRESS = "0xede79b5a0b2d15e1a49bb78a09b719bbf37c451f"
