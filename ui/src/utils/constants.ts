@@ -3,7 +3,7 @@ export const CURRENCIES: Record<string, string> = {
   "0x2d7882bedcbfddce29ba99965dd3cdf7fcb10a1e": "TST",
   "0x326c977e6efc84e512bb9c30f76e30c160ed06fb": "LINK",
   "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2": "WETH",
-  "0x2e3b96150C4D14C07781956cE4779E2a92CA1B23": "HFS2022",
+  "0x2e3b96150c4d14c07781956ce4779e2a92ca1b23": "HFS2022",
 }
 
 export const ADDRESS = "0xEafE6CDf15cFE7E2E20B0ce68382FF67f5AA43b8"

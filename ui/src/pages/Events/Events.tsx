@@ -20,7 +20,7 @@ export const Events = () => {
     [onOpen]
   )
   return (
-    <Box width="100vw" height="100vh" bgColor="black">
+    <Box width="100vw" bgColor="black">
       <Grid templateColumns="repeat(4, 1fr)" gap={9} px={40} py={10} mx={0}>
         {data &&
           data.createdEvents.map((event) => {

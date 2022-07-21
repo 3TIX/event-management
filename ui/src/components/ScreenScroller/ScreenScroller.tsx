@@ -4,7 +4,7 @@ import { ArrowDown } from "../Icon"
 
 export const ScreenScroller = () => {
   const scrollScreenDown = useCallback(() => {
-    window.scrollTo({ top: document.body.clientHeight, behavior: "smooth" })
+    window.scrollTo({ top: window.innerHeight, behavior: "smooth" })
   }, [])
 
   return (
