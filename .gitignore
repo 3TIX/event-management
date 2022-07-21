@@ -1,8 +1,0 @@
-.idea
-*.iml
-.gradle
-backend/build
-backend/**/generated
-subgraph/node_modules
-subgraph/build
-subgraph/generated
