@@ -1,6 +1,6 @@
-import { Box, Button, Heading, Text } from "@chakra-ui/react"
+import { Box, Button, Heading, HStack, Text } from "@chakra-ui/react"
 import { ExternalLinkIcon } from "@chakra-ui/icons"
-import { DiscordIcon } from "../../components/Icon"
+import { ArrowRight, DiscordIcon } from "../../components/Icon"
 
 export const QRTicket = () => {
   return (
@@ -25,7 +25,11 @@ export const QRTicket = () => {
         <Text mt={2} color="subHeader">
           When
         </Text>
-        <Text fontWeight={600}>JUL 08, 2022 {">"} JUL 29, 2022</Text>
+        <HStack spacing={1}>
+          <Text fontWeight={600}>JUL 08, 2022</Text>
+          <ArrowRight color="black" height="12px" />
+          <Text fontWeight={600}>JUL 29, 2022</Text>
+        </HStack>
       </Box>
     </Box>
   )

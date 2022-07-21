@@ -1,13 +1,15 @@
 import {
-  AspectRatio,
   Box,
   Button,
   Container,
+  HStack,
+  Image,
+  Spacer,
   Text,
   VStack,
 } from "@chakra-ui/react"
 import { EventListingObject } from "../../types/EventObject"
-import { Calendar, MapPin } from "../../components/Icon"
+import { ArrowRight, Calendar, MapPin, POAP } from "../../components/Icon"
 import { useCallback } from "react"
 
 export type EventCardProps = {
@@ -24,26 +26,26 @@ export const EventCard = ({ event, onGetTickets }: EventCardProps) => {
   }, [event, onGetTickets])
 
   return (
-    <Box borderRadius="16px" bgColor="modalBg">
-      <VStack alignItems="flex-start">
-        <AspectRatio width="100%" ratio={2 / 2}>
-          <Box
-            bgImage={event.image}
-            bgPosition="center"
-            bgRepeat="no-repeat"
-            bgSize="contain"
-            borderRadius="16px"
-          />
-        </AspectRatio>
+    <Box borderRadius="16px" bgColor="modalBg" height="100%">
+      <VStack alignItems="flex-start" height="100%">
+        <Box width="100%">
+          <Image src={event.image} width="100%" borderRadius="16px" />
+        </Box>
         <Container p={5}>
           <Text fontSize="2xl" fontWeight={600}>
             {event.name}
           </Text>
           <Text>
             <Calendar bgColor="transparent" mr={1} mb={1} />
-            {startDate.toDateString()}
-            {" > "}
-            {endDate.toDateString()}
+            {startDate.valueOf() !== endDate.valueOf() ? (
+              <>
+                {startDate.toDateString()}
+                <ArrowRight height="10px" />
+                {endDate.toDateString()}
+              </>
+            ) : (
+              startDate.toDateString()
+            )}
           </Text>
           <Text>
             <MapPin mr={1} mb={1} />
@@ -53,7 +55,8 @@ export const EventCard = ({ event, onGetTickets }: EventCardProps) => {
             {event.description}
           </Text>
         </Container>
-        <Container p={5}>
+        <Spacer />
+        <HStack p={5} width="100%">
           <Button
             onClick={onGetTicketsClick}
             color="black"
@@ -62,7 +65,14 @@ export const EventCard = ({ event, onGetTickets }: EventCardProps) => {
           >
             Get tickets
           </Button>
-        </Container>
+          {event.distributePoaps && (
+            <>
+              <Spacer />
+              <POAP width="26px" height="34px" />
+              <Text>Included</Text>
+            </>
+          )}
+        </HStack>
       </VStack>
     </Box>
   )

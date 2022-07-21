@@ -46,6 +46,7 @@ export const MainInfo = ({ onNextClick, state, dispatch }: StepProps) => {
       <VStack spacing={4} flex={1}>
         <MasterField title="Event name">
           <Input
+            isRequired
             onChange={handleChange}
             name="name"
             value={state.name}
@@ -56,6 +57,7 @@ export const MainInfo = ({ onNextClick, state, dispatch }: StepProps) => {
         </MasterField>
         <MasterField title="Number of tickets">
           <Input
+            isRequired
             name="ticketCount"
             value={state.ticketCount}
             onChange={handleChange}
@@ -64,6 +66,7 @@ export const MainInfo = ({ onNextClick, state, dispatch }: StepProps) => {
         </MasterField>
         <MasterField title="Ticket price">
           <Input
+            isRequired
             flex={1}
             name="ticketPrice"
             value={state.ticketPrice}
@@ -79,9 +82,9 @@ export const MainInfo = ({ onNextClick, state, dispatch }: StepProps) => {
               colorScheme="transparent"
               variant="ghost"
               as={Button}
-              rightIcon={<ChevronDownIcon width="20px" height="20px" />}
+              rightIcon={<ChevronDownIcon width="16px" height="16px" />}
             >
-              {CURRENCIES[state.ticketCurrency]}
+              {CURRENCIES[state.ticketCurrency.toLowerCase()]}
             </MenuButton>
             <MenuList bgColor="modalBg" border="none">
               {Object.entries(CURRENCIES).map(([value, label]) => {
@@ -101,6 +104,7 @@ export const MainInfo = ({ onNextClick, state, dispatch }: StepProps) => {
         </MasterField>
         <MasterField title="Resale royalty (%)">
           <Input
+            isRequired
             name="royaltyPercentage"
             value={state.royaltyPercentage}
             onChange={handleChange}

@@ -7,14 +7,13 @@ import { FixedPageBackground } from "./components/FixedPageBackground"
 import { ApolloProvider } from "@apollo/client"
 import { client } from "./graphql"
 import { Events } from "./pages/Events"
-import { ScreenScroller } from "./components/ScreenScroller/ScreenScroller"
 
 export const App = () => (
   <Web3ContextProvider>
     <ApolloProvider client={client}>
       <ChakraProvider theme={theme}>
-        <FixedPageBackground />
         <CreateTickets />
+        <FixedPageBackground />
         <Events />
       </ChakraProvider>
     </ApolloProvider>

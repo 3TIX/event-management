@@ -8,6 +8,8 @@ import {
   Button,
   MenuItem,
   HStack,
+  Text,
+  Switch,
 } from "@chakra-ui/react"
 import { MasterField } from "../../MasterField"
 import { StepProps } from "../EventCreateMaster"
@@ -20,6 +22,13 @@ export const Parameters = ({ state, dispatch, onNextClick }: StepProps) => {
   const handleChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       dispatch({ fieldName: event.target.name, value: event.target.value })
+    },
+    [dispatch]
+  )
+
+  const handleSwitchChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      dispatch({ fieldName: event.target.name, value: event.target.checked })
     },
     [dispatch]
   )
@@ -47,6 +56,7 @@ export const Parameters = ({ state, dispatch, onNextClick }: StepProps) => {
       <VStack spacing={4} flex={1}>
         <MasterField title="Event symbol">
           <Input
+            isRequired
             name="symbol"
             value={state.symbol}
             onChange={handleChange}
@@ -56,6 +66,7 @@ export const Parameters = ({ state, dispatch, onNextClick }: StepProps) => {
         <HStack alignSelf="stretch">
           <MasterField title="Event starts" flex={1}>
             <Input
+              isRequired
               onChange={handleChange}
               name="startDate"
               value={state.startDate}
@@ -68,6 +79,7 @@ export const Parameters = ({ state, dispatch, onNextClick }: StepProps) => {
           <ArrowRight />
           <MasterField title="Event ends" flex={1}>
             <Input
+              isRequired
               onChange={handleChange}
               name="endDate"
               value={state.endDate}
@@ -79,6 +91,16 @@ export const Parameters = ({ state, dispatch, onNextClick }: StepProps) => {
           </MasterField>
         </HStack>
         <MasterField title="Event location">
+          <Input
+            isRequired
+            flex={1}
+            onChange={handleChange}
+            name="location"
+            value={state.location}
+            mt={0}
+            size="sm"
+            variant="unstyled"
+          />
           <Menu>
             <MenuButton
               size="xs"
@@ -107,18 +129,10 @@ export const Parameters = ({ state, dispatch, onNextClick }: StepProps) => {
               </MenuItem>
             </MenuList>
           </Menu>
-          <Input
-            flex={1}
-            onChange={handleChange}
-            name="location"
-            value={state.location}
-            mt={0}
-            size="sm"
-            variant="unstyled"
-          />
         </MasterField>
         <MasterField title="Contact email">
           <Input
+            isRequired
             onChange={handleChange}
             name="organiserEmail"
             value={state.organiserEmail}
@@ -126,6 +140,19 @@ export const Parameters = ({ state, dispatch, onNextClick }: StepProps) => {
             size="sm"
             variant="unstyled"
           />
+        </MasterField>
+        <MasterField title="Distribute POAPs">
+          <Text fontSize="sm" mr={2}>
+            No
+          </Text>
+          <Switch
+            name="distributePoaps"
+            isChecked={state.distributePoaps}
+            onChange={handleSwitchChange}
+          />
+          <Text fontSize="sm" ml={2}>
+            Yes
+          </Text>
         </MasterField>
         <Spacer />
         <NextButton />

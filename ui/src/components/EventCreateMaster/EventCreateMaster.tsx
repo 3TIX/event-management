@@ -12,7 +12,6 @@ import { StepIndicator } from "../StepIndicator/StepIndicator"
 import { Description } from "./Steps/Description"
 import { BackButton } from "./BackButton"
 import { Parameters } from "./Steps/Parameters"
-import { TicketCreating } from "./Steps/TicketCreating"
 import { Done } from "./Steps/Done"
 import { EventObject } from "../../types/EventObject"
 
@@ -21,23 +20,23 @@ export type TicketCreateMasterProps = {
   onClose: () => void
 }
 
-/*const initialState = {
+const initialState: EventObject = {
   name: "",
   description: "",
   image: "",
   isOnline: true,
   location: "",
-  startDate: Date.now(),
-  endDate: Date.now(),
+  startDate: new Date().toISOString().split("T")[0],
+  endDate: new Date().toISOString().split("T")[0],
   organiserEmail: "",
-  ticketCount: 1000,
-  ticketPrice: 100,
-  ticketCurrency: "0x0000000000000000000000000000000000000000",
+  ticketCount: 1,
+  ticketPrice: 1,
+  ticketCurrency: "0x2e3b96150C4D14C07781956cE4779E2a92CA1B23",
   royaltyPercentage: 1,
   distributePoaps: true,
-}*/
+}
 
-const initialState: EventObject = {
+/*const initialState: EventObject = {
   name: "HackFS ticket",
   description:
     "HackFS is an ETHGlobal hackathon focused on building the foundation for that world. We've partnered with Protocol Labs - the organization building Filecoin and IPFS - to run an event centered on dapps, web3, decentralized storage, and everything in between.",
@@ -53,7 +52,7 @@ const initialState: EventObject = {
   ticketCurrency: "0x2e3b96150C4D14C07781956cE4779E2a92CA1B23",
   royaltyPercentage: 1,
   distributePoaps: true,
-}
+}*/
 
 type Action = { fieldName: string; value: unknown }
 
@@ -72,7 +71,6 @@ const Steps: Array<React.ComponentType<StepProps>> = [
   MainInfo,
   Parameters,
   Description,
-  TicketCreating,
   Done,
 ]
 

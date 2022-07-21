@@ -10,7 +10,6 @@ export const FixedPageBackground = () => {
       height="calc(200vh + 60px)"
       top="60px"
       opacity={0.5}
-      zIndex={1}
       bgGradient="radial(bg.gradient.start 0%, bg.gradient.end 73%)"
     />
   )

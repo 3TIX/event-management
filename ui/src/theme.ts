@@ -9,9 +9,9 @@ export const theme = extendTheme({
         overflowX: "hidden",
       },
       ".clampedText": {
-        "-webkit-line-clamp": "3",
+        WebkitLineClamp: "3",
         overflow: "hidden",
-        "-webkit-box-orient": "vertical",
+        WebkitBoxOrient: "vertical",
         display: "-webkit-box",
       },
     },
