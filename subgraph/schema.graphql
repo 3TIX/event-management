@@ -7,6 +7,7 @@ type QrCodeClaimed @entity(immutable: true) {
 
 type CreatedEvent @entity(immutable: true) {
     id: ID!
+    blockNumber: BigInt!
     cid: String!
     creatorAddress: Bytes!
     name: String!
