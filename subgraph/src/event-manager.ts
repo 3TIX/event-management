@@ -38,6 +38,7 @@ export function handleEventCreated(event: EventCreated): void {
 export function handleQrCodeClaimed(event: QrCodeClaimed): void {
   const entity = new QrCodeClaimedEntity(event.params.qrCodeId);
   entity.eventAddress = event.params.eventAddress;
+  entity.event = event.params.eventAddress.toHexString();
   entity.tokenId = event.params.tokenId;
   entity.blockNumber = event.block.number;
 
