@@ -1,4 +1,10 @@
-import { Box, Grid, GridItem, useDisclosure } from "@chakra-ui/react"
+import {
+  Box,
+  Grid,
+  GridItem,
+  useDisclosure,
+  useInterval,
+} from "@chakra-ui/react"
 import { EventCard } from "./EventCard"
 import { useCallback, useState } from "react"
 import { EventListingObject } from "../../types/EventObject"
@@ -10,8 +16,13 @@ export const Events = () => {
   const [openedEvent, setOpenedEvent] = useState<EventListingObject | null>(
     null
   )
-  const { data } = useQuery<CreatedEventsData>(EventsQuery)
+  const { data, refetch } = useQuery<CreatedEventsData>(EventsQuery)
   const { isOpen, onOpen, onClose } = useDisclosure()
+
+  useInterval(() => {
+    refetch()
+  }, 5000)
+
   const onGetTicketsClicked = useCallback(
     (event: EventListingObject) => {
       onOpen()
@@ -25,7 +36,7 @@ export const Events = () => {
         {data &&
           data.createdEvents.map((event) => {
             return (
-              <GridItem width="100%" key={event.id}>
+              <GridItem width="100%" key={event.id} zIndex={1}>
                 <EventCard event={event} onGetTickets={onGetTicketsClicked} />
               </GridItem>
             )

@@ -13,8 +13,8 @@ export const App = () => (
     <ApolloProvider client={client}>
       <ChakraProvider theme={theme}>
         <CreateTickets />
-        <FixedPageBackground />
         <Events />
+        <FixedPageBackground />
       </ChakraProvider>
     </ApolloProvider>
   </Web3ContextProvider>

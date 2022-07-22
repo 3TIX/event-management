@@ -3,6 +3,7 @@ import { Box } from "@chakra-ui/react"
 export const FixedPageBackground = () => {
   return (
     <Box
+      pointerEvents="none"
       position="fixed"
       bottom="calc(-100vh - 30px)"
       right="calc(-100vh - 30px)"
