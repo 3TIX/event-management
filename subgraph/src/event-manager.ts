@@ -5,6 +5,7 @@ import { Bytes, ipfs, json, log } from "@graphprotocol/graph-ts"
 export function handleEventCreated(event: EventCreated): void {
   const id = event.params.eventAddress.toHexString();
   const entity = new CreatedEvent(id);
+  entity.blockNumber = event.block.number;
   entity.creatorAddress = event.transaction.from;
 
   const cid = event.params.eventURI.substring(8, 67);
