@@ -6,10 +6,11 @@ import { Web3Connect } from "../Web3Connect"
 import React, { useContext } from "react"
 import { Web3Context } from "../../contexts/Web3Context"
 import { ethers } from "ethers"
+import { BuyTicket } from "../../types/Functions"
 
 type EventDisplayProps = {
   event: EventListingObject
-  purchaseTicket: (address: string, price: string, currency: string) => void
+  purchaseTicket: BuyTicket
 }
 
 export const EventDisplay = ({ event, purchaseTicket }: EventDisplayProps) => {
@@ -63,7 +64,11 @@ export const EventDisplay = ({ event, purchaseTicket }: EventDisplayProps) => {
             width="100%"
             borderRadius="100px"
             onClick={() =>
-              purchaseTicket(event.id, event.ticketPrice, event.ticketCurrency)
+              purchaseTicket({
+                address: event.id,
+                price: event.ticketPrice,
+                currency: event.ticketCurrency,
+              })
             }
           >
             Get ticket

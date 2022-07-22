@@ -29,8 +29,9 @@ export const EventCard = ({ event, onGetTickets }: EventCardProps) => {
     <Box borderRadius="16px" bgColor="modalBg" height="100%">
       <VStack alignItems="flex-start" height="100%">
         <Box width="100%">
-          <Image src={event.image} width="100%" borderRadius="16px" />
+          <Image src={event.image} width="100%" borderRadius="16px 16px 0 0" />
         </Box>
+        <Spacer />
         <Container p={5}>
           <Text fontSize="2xl" fontWeight={600}>
             {event.name}
@@ -55,7 +56,6 @@ export const EventCard = ({ event, onGetTickets }: EventCardProps) => {
             {event.description}
           </Text>
         </Container>
-        <Spacer />
         <HStack p={5} width="100%">
           <Button
             onClick={onGetTicketsClick}

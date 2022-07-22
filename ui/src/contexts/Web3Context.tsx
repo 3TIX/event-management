@@ -1,10 +1,15 @@
-import { ethers, providers } from "ethers"
+import { providers } from "ethers"
 import { createContext, PropsWithChildren, useCallback, useState } from "react"
-import { ERC20__factory, EventManager__factory } from "../typechain-types"
+import {
+  ERC20__factory,
+  EventManager__factory,
+  EventNFT__factory,
+} from "../typechain-types"
 import { EventObject } from "../types/EventObject"
 import { uploadJSON } from "../utils/ipfsTools"
 import { utils } from "ethers"
-import { ADDRESS } from "../utils/constants"
+import { EVENT_MANAGER_ADDRESS, NATIVE_CURRENCY } from "../utils/constants"
+import { BuyTicket } from "../types/Functions"
 
 type Context = {
   provider?: providers.Web3Provider
@@ -12,11 +17,7 @@ type Context = {
   account?: string
   setAccount: (account?: string) => void
   createEvent: (json: EventObject) => Promise<unknown>
-  buyTicket: (
-    address: string,
-    price: string,
-    currency: string
-  ) => Promise<unknown>
+  buyTicket: BuyTicket
 }
 
 export const Web3Context = createContext<Context>({
@@ -25,8 +26,7 @@ export const Web3Context = createContext<Context>({
   account: undefined,
   setAccount: (account) => {},
   createEvent: (json) => Promise.resolve(),
-  buyTicket: (address: string, price: string, currency: string) =>
-    Promise.resolve(),
+  buyTicket: () => Promise.resolve(),
 })
 
 export const Web3ContextProvider = ({ children }: PropsWithChildren) => {
@@ -47,7 +47,7 @@ export const Web3ContextProvider = ({ children }: PropsWithChildren) => {
 
       try {
         const connection = EventManager__factory.connect(
-          ADDRESS,
+          EVENT_MANAGER_ADDRESS,
           provider?.getSigner()!
         )
         const event = await connection.createEvent(
@@ -56,9 +56,10 @@ export const Web3ContextProvider = ({ children }: PropsWithChildren) => {
           `https://${cid}.ipfs.nftstorage.link`,
           copy.ticketCount,
           copy.ticketCurrency,
-          utils.parseEther(copy.ticketPrice.toString()),
+          copy.ticketPrice.toString(),
           { value: utils.parseEther("0.1") }
         )
+        await event.wait(1)
         console.log(event)
       } catch (e) {
         console.log("Failed to create event, ", e)
@@ -68,16 +69,27 @@ export const Web3ContextProvider = ({ children }: PropsWithChildren) => {
     [provider]
   )
 
-  const buyTicket = useCallback(
-    async (address: string, price: string, currency: string) => {
-      const isNative = currency === "0x0000000000000000000000000000000000000000"
+  const buyTicket: BuyTicket = useCallback(
+    async ({ price, currency, address }) => {
+      const isNative = currency === NATIVE_CURRENCY
       if (!isNative) {
         try {
           const connection = ERC20__factory.connect(
             currency,
             provider?.getSigner()!
           )
-          await connection.approve(ADDRESS, price)
+          const allowance = await connection.allowance(
+            account!,
+            EVENT_MANAGER_ADDRESS
+          )
+          if (allowance.lt(price)) {
+            const transaction = await connection.approve(
+              EVENT_MANAGER_ADDRESS,
+              price
+            )
+            await transaction.wait(1)
+            console.log(transaction)
+          }
         } catch (e) {
           console.log("Failed to authorise amount, ", e)
           throw e
@@ -85,20 +97,20 @@ export const Web3ContextProvider = ({ children }: PropsWithChildren) => {
       }
       try {
         const connection = EventManager__factory.connect(
-          ADDRESS,
+          EVENT_MANAGER_ADDRESS,
           provider?.getSigner()!
         )
-        const ticketNFT = await connection.buyTicket(
-          address,
-          isNative ? { value: price } : undefined
-        )
+        const ticketNFT = isNative
+          ? await connection.buyTicket(address, { value: price })
+          : await connection.buyTicket(address)
+        await ticketNFT.wait(1)
         console.log(ticketNFT)
       } catch (e) {
         console.log("Failed to purchase a ticket, ", e)
         throw e
       }
     },
-    [provider]
+    [account, provider]
   )
 
   return (

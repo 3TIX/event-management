@@ -3,7 +3,7 @@ import { EventListingObject } from "../types/EventObject"
 
 export const EventsQuery = gql`
   query CreatedEvents {
-    createdEvents {
+    createdEvents(orderBy: blockNumber) {
       id
       cid
       creatorAddress

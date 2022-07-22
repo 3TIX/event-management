@@ -15,6 +15,7 @@ import { Check } from "../Icon"
 import { Web3Context } from "../../contexts/Web3Context"
 import { LoadingScreen } from "../LoadingScreen"
 import { EventDisplay } from "./EventDisplay"
+import { BuyTicket } from "../../types/Functions"
 
 type EventDetailsModalProps = {
   event: EventListingObject | null
@@ -25,7 +26,7 @@ type EventDetailsModalProps = {
 type ContentProps = {
   isPurchasing: boolean
   purchasedSuccessfully: boolean
-  purchaseTicket: (address: string, price: string, currency: string) => void
+  purchaseTicket: BuyTicket
   event: EventListingObject
 }
 
@@ -74,10 +75,10 @@ export const EventDetailsModal = ({
     onClose()
   }, [onClose])
 
-  const purchaseTicket = useCallback(
-    (address: string, price: string, currency: string) => {
+  const purchaseTicket = useCallback<BuyTicket>(
+    ({ address, currency, price }) => {
       setIsPurchasing(true)
-      buyTicket(address, price, currency)
+      return buyTicket({ address, price, currency })
         .then(() => setPurchasedSuccessfully(true))
         .finally(() => setIsPurchasing(false))
     },
