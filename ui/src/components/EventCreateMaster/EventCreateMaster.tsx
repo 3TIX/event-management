@@ -29,10 +29,10 @@ const initialState: EventObject = {
   startDate: new Date().toISOString().split("T")[0],
   endDate: new Date().toISOString().split("T")[0],
   organiserEmail: "",
-  ticketCount: 1,
-  ticketPrice: 1,
+  ticketCount: "1",
+  ticketPrice: "1",
   ticketCurrency: "0x2e3b96150C4D14C07781956cE4779E2a92CA1B23",
-  royaltyPercentage: 1,
+  royaltyPercentage: "1",
   distributePoaps: true,
 }
 

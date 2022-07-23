@@ -24,8 +24,20 @@ export const EventsQuery = gql`
   }
 `
 
+export const EventAddressesQuery = gql`
+  query CreatedEvents {
+    createdEvents(orderBy: blockNumber) {
+      id
+    }
+  }
+`
+
 export type CreatedEventsData = {
   createdEvents: Array<EventListingObject>
+}
+
+export type EventAddressesData = {
+  createdEvents: Array<{ id: string }>
 }
 
 export const client = new ApolloClient({

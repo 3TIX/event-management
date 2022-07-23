@@ -58,6 +58,7 @@ export const MainInfo = ({ onNextClick, state, dispatch }: StepProps) => {
         <MasterField title="Number of tickets">
           <Input
             isRequired
+            type="number"
             name="ticketCount"
             value={state.ticketCount}
             onChange={handleChange}

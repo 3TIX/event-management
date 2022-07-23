@@ -1,15 +1,21 @@
 import { providers } from "ethers"
-import { createContext, PropsWithChildren, useCallback, useState } from "react"
 import {
-  ERC20__factory,
-  EventManager__factory,
-  EventNFT__factory,
-} from "../typechain-types"
+  createContext,
+  PropsWithChildren,
+  useCallback,
+  useContext,
+  useState,
+} from "react"
 import { EventObject } from "../types/EventObject"
-import { uploadJSON } from "../utils/ipfsTools"
-import { utils } from "ethers"
-import { EVENT_MANAGER_ADDRESS, NATIVE_CURRENCY } from "../utils/constants"
 import { BuyTicket } from "../types/Functions"
+import {
+  buyTicketByAddress,
+  createEventFromJSON,
+  getAllowance,
+  isNativeCurrency,
+} from "./helpers"
+import { EventManager__factory } from "../typechain-types"
+import { EVENT_MANAGER_ADDRESS } from "../utils/constants"
 
 type Context = {
   provider?: providers.Web3Provider
@@ -18,6 +24,11 @@ type Context = {
   setAccount: (account?: string) => void
   createEvent: (json: EventObject) => Promise<unknown>
   buyTicket: BuyTicket
+  claimQRCode: (
+    qrCodeId: string,
+    tokenId: string,
+    eventAddress: string
+  ) => Promise<unknown>
 }
 
 export const Web3Context = createContext<Context>({
@@ -27,6 +38,7 @@ export const Web3Context = createContext<Context>({
   setAccount: (account) => {},
   createEvent: (json) => Promise.resolve(),
   buyTicket: () => Promise.resolve(),
+  claimQRCode: () => Promise.resolve(),
 })
 
 export const Web3ContextProvider = ({ children }: PropsWithChildren) => {
@@ -35,82 +47,47 @@ export const Web3ContextProvider = ({ children }: PropsWithChildren) => {
 
   const createEvent = useCallback(
     async (json: EventObject) => {
-      const copy: Record<string, any> = Object.assign({}, json)
-      copy.startDate = String(new Date(copy.startDate).valueOf() / 1000)
-      copy.endDate = String(new Date(copy.endDate).valueOf() / 1000)
-      copy.ticketPrice = utils
-        .parseEther(copy.ticketPrice.toString())
-        .toString()
-      const symbol = copy.symbol || "SYMB"
-      delete copy.symbol
-      const cid = await uploadJSON(copy)
-
-      try {
-        const connection = EventManager__factory.connect(
-          EVENT_MANAGER_ADDRESS,
-          provider?.getSigner()!
-        )
-        const event = await connection.createEvent(
-          copy.name,
-          symbol,
-          `https://${cid}.ipfs.nftstorage.link`,
-          copy.ticketCount,
-          copy.ticketCurrency,
-          copy.ticketPrice.toString(),
-          { value: utils.parseEther("0.1") }
-        )
-        await event.wait(1)
-        console.log(event)
-      } catch (e) {
-        console.log("Failed to create event, ", e)
-        throw e
-      }
+      await createEventFromJSON({ json, provider })
     },
     [provider]
   )
 
   const buyTicket: BuyTicket = useCallback(
     async ({ price, currency, address }) => {
-      const isNative = currency === NATIVE_CURRENCY
+      const isNative = isNativeCurrency(currency)
       if (!isNative) {
-        try {
-          const connection = ERC20__factory.connect(
-            currency,
-            provider?.getSigner()!
-          )
-          const allowance = await connection.allowance(
-            account!,
-            EVENT_MANAGER_ADDRESS
-          )
-          if (allowance.lt(price)) {
-            const transaction = await connection.approve(
-              EVENT_MANAGER_ADDRESS,
-              price
-            )
-            await transaction.wait(1)
-            console.log(transaction)
-          }
-        } catch (e) {
-          console.log("Failed to authorise amount, ", e)
-          throw e
-        }
+        await getAllowance({ currency, price, account, provider })
       }
+      await buyTicketByAddress({
+        currency,
+        price,
+        provider,
+        eventAddress: address,
+      })
+    },
+    [account, provider]
+  )
+
+  const claimQRCode = useCallback(
+    async (qrCodeId: string, tokenId: string, eventAddress: string) => {
       try {
-        const connection = EventManager__factory.connect(
+        const connection = await EventManager__factory.connect(
           EVENT_MANAGER_ADDRESS,
           provider?.getSigner()!
         )
-        const ticketNFT = isNative
-          ? await connection.buyTicket(address, { value: price })
-          : await connection.buyTicket(address)
-        await ticketNFT.wait(1)
-        console.log(ticketNFT)
+        const result = await connection.claimQrCode(
+          eventAddress,
+          tokenId,
+          qrCodeId
+        )
+        await result.wait(1)
+        console.log(result)
       } catch (e) {
         console.log("Failed to purchase a ticket, ", e)
         throw e
       }
     },
-    [account, provider]
+    [provider]
   )
 
   return (
@@ -122,6 +99,7 @@ export const Web3ContextProvider = ({ children }: PropsWithChildren) => {
         setProvider,
         createEvent,
         buyTicket,
+        claimQRCode,
       }}
     >
       {children}
