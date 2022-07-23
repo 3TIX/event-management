@@ -1,5 +1,6 @@
 package io.github.hackfs2022.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import io.github.hackfs2022.json.Json;
 
 import java.io.IOException;
@@ -26,6 +27,26 @@ public class TheGraphService {
             blockNumber
           }
         }""";
+    private static final String EVENTS_QUERY = """
+        query CreatedEvents($fromBlock: String!) {
+          createdEvents(orderBy: blockNumber, where: {blockNumber_gt: $fromBlock}) {
+            id
+            cid
+            creatorAddress
+            name
+            description
+            isOnline
+            location
+            startDate
+            endDate
+            organiserEmail
+            ticketCount
+            ticketPrice
+            ticketCurrency
+            royaltyPercentage
+            distributePoaps
+          }
+        }""";
 
     private final HttpClient httpClient;
 
@@ -42,19 +63,41 @@ public class TheGraphService {
         final var request = HttpRequest.newBuilder(API_URI)
             .POST(BodyPublishers.ofString(jsonNode.toString()))
             .build();
-
-        try {
-            final var response = httpClient.send(request, BodyHandlers.ofString());
-            final var parsedResponse = parseTree(response.body())
-                .get("data")
-                .get("qrCodeClaimeds");
-            return Json.parseList(parsedResponse, QrCodeClaimedEvent.class);
-        } catch (IOException | InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        final var response = sendRequest(request)
+            .get("data")
+            .get("qrCodeClaimeds");
+        return Json.parseList(response, QrCodeClaimedEvent.class);
     }
 
     public record QrCodeClaimedEvent(UUID id, String eventAddress, int tokenId, String blockNumber) {
 
+    }
+
+    public List<CreatedEventInfo> getEvents(int fromBlock) {
+        final var jsonNode = object()
+            .put("query", EVENTS_QUERY)
+            .set("variables", object()
+                .put("fromBlock", String.valueOf(fromBlock)));
+
+        final var request = HttpRequest.newBuilder(API_URI)
+            .POST(BodyPublishers.ofString(jsonNode.toString()))
+            .build();
+        final var response = sendRequest(request)
+            .get("data")
+            .get("createdEvents");
+        return Json.parseList(response, CreatedEventInfo.class);
+    }
+
+    public record CreatedEventInfo(String id, String blockNumber, String name, String endDate, boolean distributePoaps) {
+
+    }
+
+    private JsonNode sendRequest(HttpRequest httpRequest) {
+        try {
+            final var response = httpClient.send(httpRequest, BodyHandlers.ofString());
+            return parseTree(response.body());
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
