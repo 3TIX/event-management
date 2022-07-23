@@ -32,7 +32,7 @@ export interface EventManagerInterface extends utils.Interface {
   functions: {
     "buyTicket(address)": FunctionFragment;
     "claimQrCode(address,uint16,string)": FunctionFragment;
-    "createEvent(string,string,string,uint16,address,uint256)": FunctionFragment;
+    "createEvent(string,string,string,uint16,address,uint256,uint8)": FunctionFragment;
     "fee()": FunctionFragment;
     "owner()": FunctionFragment;
     "supportedCurrencies(address)": FunctionFragment;
@@ -70,6 +70,7 @@ export interface EventManagerInterface extends utils.Interface {
       PromiseOrValue<string>,
       PromiseOrValue<BigNumberish>,
       PromiseOrValue<string>,
+      PromiseOrValue<BigNumberish>,
       PromiseOrValue<BigNumberish>
     ]
   ): string;
@@ -176,6 +177,7 @@ export interface EventManager extends BaseContract {
       ticketsTotal: PromiseOrValue<BigNumberish>,
       currency: PromiseOrValue<string>,
       price: PromiseOrValue<BigNumberish>,
+      royaltyPercentage: PromiseOrValue<BigNumberish>,
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -212,6 +214,7 @@ export interface EventManager extends BaseContract {
     ticketsTotal: PromiseOrValue<BigNumberish>,
     currency: PromiseOrValue<string>,
     price: PromiseOrValue<BigNumberish>,
+    royaltyPercentage: PromiseOrValue<BigNumberish>,
     overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -248,6 +251,7 @@ export interface EventManager extends BaseContract {
       ticketsTotal: PromiseOrValue<BigNumberish>,
       currency: PromiseOrValue<string>,
       price: PromiseOrValue<BigNumberish>,
+      royaltyPercentage: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -302,6 +306,7 @@ export interface EventManager extends BaseContract {
       ticketsTotal: PromiseOrValue<BigNumberish>,
       currency: PromiseOrValue<string>,
       price: PromiseOrValue<BigNumberish>,
+      royaltyPercentage: PromiseOrValue<BigNumberish>,
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -339,6 +344,7 @@ export interface EventManager extends BaseContract {
       ticketsTotal: PromiseOrValue<BigNumberish>,
       currency: PromiseOrValue<string>,
       price: PromiseOrValue<BigNumberish>,
+      royaltyPercentage: PromiseOrValue<BigNumberish>,
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
