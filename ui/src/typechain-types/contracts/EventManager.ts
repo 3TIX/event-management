@@ -32,7 +32,7 @@ export interface EventManagerInterface extends utils.Interface {
   functions: {
     "buyTicket(address)": FunctionFragment;
     "claimQrCode(address,uint16,string)": FunctionFragment;
-    "createEvent(string,string,string,uint16,address,uint256,uint8)": FunctionFragment;
+    "createEvent(string,string,string,uint16,address,uint256,uint96)": FunctionFragment;
     "fee()": FunctionFragment;
     "owner()": FunctionFragment;
     "supportedCurrencies(address)": FunctionFragment;

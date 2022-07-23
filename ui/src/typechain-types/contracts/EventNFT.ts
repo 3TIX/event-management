@@ -45,6 +45,8 @@ export interface EventNFTInterface extends utils.Interface {
     "ownerOf(uint256)": FunctionFragment;
     "price()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
+    "royaltyInfo(uint256,uint256)": FunctionFragment;
+    "royaltyPercentage()": FunctionFragment;
     "safeTransferFrom(address,address,uint256)": FunctionFragment;
     "safeTransferFrom(address,address,uint256,bytes)": FunctionFragment;
     "setApprovalForAll(address,bool)": FunctionFragment;
@@ -73,6 +75,8 @@ export interface EventNFTInterface extends utils.Interface {
       | "ownerOf"
       | "price"
       | "renounceOwnership"
+      | "royaltyInfo"
+      | "royaltyPercentage"
       | "safeTransferFrom(address,address,uint256)"
       | "safeTransferFrom(address,address,uint256,bytes)"
       | "setApprovalForAll"
@@ -130,6 +134,14 @@ export interface EventNFTInterface extends utils.Interface {
   encodeFunctionData(functionFragment: "price", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "renounceOwnership",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "royaltyInfo",
+    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "royaltyPercentage",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -204,6 +216,14 @@ export interface EventNFTInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "price", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "renounceOwnership",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "royaltyInfo",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "royaltyPercentage",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -379,6 +399,14 @@ export interface EventNFT extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
+    royaltyInfo(
+      _tokenId: PromiseOrValue<BigNumberish>,
+      _salePrice: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[string, BigNumber]>;
+
+    royaltyPercentage(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     "safeTransferFrom(address,address,uint256)"(
       from: PromiseOrValue<string>,
       to: PromiseOrValue<string>,
@@ -483,6 +511,14 @@ export interface EventNFT extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  royaltyInfo(
+    _tokenId: PromiseOrValue<BigNumberish>,
+    _salePrice: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<[string, BigNumber]>;
+
+  royaltyPercentage(overrides?: CallOverrides): Promise<BigNumber>;
+
   "safeTransferFrom(address,address,uint256)"(
     from: PromiseOrValue<string>,
     to: PromiseOrValue<string>,
@@ -584,6 +620,14 @@ export interface EventNFT extends BaseContract {
     price(overrides?: CallOverrides): Promise<BigNumber>;
 
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
+
+    royaltyInfo(
+      _tokenId: PromiseOrValue<BigNumberish>,
+      _salePrice: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[string, BigNumber]>;
+
+    royaltyPercentage(overrides?: CallOverrides): Promise<BigNumber>;
 
     "safeTransferFrom(address,address,uint256)"(
       from: PromiseOrValue<string>,
@@ -734,6 +778,14 @@ export interface EventNFT extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
+    royaltyInfo(
+      _tokenId: PromiseOrValue<BigNumberish>,
+      _salePrice: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    royaltyPercentage(overrides?: CallOverrides): Promise<BigNumber>;
+
     "safeTransferFrom(address,address,uint256)"(
       from: PromiseOrValue<string>,
       to: PromiseOrValue<string>,
@@ -838,6 +890,14 @@ export interface EventNFT extends BaseContract {
     renounceOwnership(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
+
+    royaltyInfo(
+      _tokenId: PromiseOrValue<BigNumberish>,
+      _salePrice: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    royaltyPercentage(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     "safeTransferFrom(address,address,uint256)"(
       from: PromiseOrValue<string>,
