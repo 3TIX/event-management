@@ -2,7 +2,9 @@ package io.github.hackfs2022;
 
 import com.google.common.util.concurrent.ServiceManager;
 import io.github.hackfs2022.http.ExceptionHandler;
+import io.github.hackfs2022.http.HealthCheckResource;
 import io.github.hackfs2022.http.QrCodeResource;
+import io.github.hackfs2022.http.Resource;
 import io.github.hackfs2022.job.EventCreationJob;
 import io.github.hackfs2022.job.QrCodeTicketDistributionJob;
 import io.github.hackfs2022.repository.EventRepository;
@@ -22,6 +24,7 @@ import javax.sql.DataSource;
 import java.lang.invoke.MethodHandles;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import static io.github.hackfs2022.json.Json.OBJECT_MAPPER;
 import static java.lang.Runtime.getRuntime;
@@ -62,7 +65,9 @@ public class HackFsApp {
             javalinConfig.jsonMapper(new JavalinJackson(OBJECT_MAPPER));
         });
         getRuntime().addShutdownHook(new Thread(javalin::stop));
-        javalin.routes(new QrCodeResource(qrCodeTicketRepository).routes());
+        Stream.of(new HealthCheckResource(), new QrCodeResource(qrCodeTicketRepository))
+            .map(Resource::routes)
+            .forEach(javalin::routes);
         ExceptionHandler.register(javalin);
         javalin.start(8080);
 
