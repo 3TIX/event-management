@@ -11,10 +11,10 @@ type CreatedEvent @entity(immutable: true) {
     startDate: Int!
     endDate: Int!
     organiserEmail: String!
-    ticketCount: Int!
+    ticketCount: String!
     ticketPrice: String!
     ticketCurrency: Bytes!
-    royaltyPercentage: Int!
+    royaltyPercentage: String!
     distributePoaps: Boolean!
 }
 
