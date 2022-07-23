@@ -3,7 +3,9 @@ package io.github.hackfs2022;
 import com.google.common.util.concurrent.ServiceManager;
 import io.github.hackfs2022.http.ExceptionHandler;
 import io.github.hackfs2022.http.QrCodeResource;
+import io.github.hackfs2022.job.EventCreationJob;
 import io.github.hackfs2022.job.QrCodeTicketDistributionJob;
+import io.github.hackfs2022.repository.EventRepository;
 import io.github.hackfs2022.repository.QrCodeTicketRepository;
 import io.github.hackfs2022.service.MailService;
 import io.github.hackfs2022.service.QrCodeGenerator;
@@ -41,13 +43,15 @@ public class HackFsApp {
 
         final var connectionProvider = new DataSourceConnectionProvider(dataSource);
         final var qrCodeTicketRepository = new QrCodeTicketRepository(connectionProvider);
+        final var eventRepository = new EventRepository(connectionProvider);
 
         final var theGraphService = new TheGraphService(newHttpClient());
         final var qrCodeGenerator = new QrCodeGenerator();
         final var mailService = new MailService(getFromEnv("HACK_FS_EMAIL_USERNAME"), getFromEnv("HACK_FS_EMAIL_PASSWORD"));
 
         final var serviceManager = new ServiceManager(List.of(
-            new QrCodeTicketDistributionJob(qrCodeTicketRepository, theGraphService, qrCodeGenerator, mailService)
+            new QrCodeTicketDistributionJob(qrCodeTicketRepository, theGraphService, qrCodeGenerator, mailService),
+            new EventCreationJob(eventRepository, theGraphService)
         ));
         getRuntime().addShutdownHook(new Thread(serviceManager::stopAsync));
         serviceManager.startAsync();
