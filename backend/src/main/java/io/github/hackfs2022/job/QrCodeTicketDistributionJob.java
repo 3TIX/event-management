@@ -70,7 +70,7 @@ public class QrCodeTicketDistributionJob extends AbstractScheduledService {
 
     private void sendTicket(QrCodeTicket ticket) {
         try {
-            final var qrCode = qrCodeGenerator.generate(ticket + ":" + ticket.validationCode);
+            final var qrCode = qrCodeGenerator.generate(ticket.id + ":" + ticket.validationCode);
 
             final var tempFile = createTempFile("qr-code-images", randomUUID().toString());
             final var fileOutputStream = new FileOutputStream(tempFile);
