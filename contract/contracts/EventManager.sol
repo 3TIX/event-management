@@ -28,11 +28,10 @@ contract EventManager {
         owner.transfer(address(this).balance);
     }
 
-    function createEvent(string calldata eventName, string calldata eventSymbol, string calldata eventURI, uint16 ticketsTotal, address currency, uint256 price, uint8 royaltyPercentage) public payable {
-        // TODO uncomment before final submission
-        //require(msg.value >= fee, "too small fee");
+    function createEvent(string calldata eventName, string calldata eventSymbol, string calldata eventURI, uint16 ticketsTotal, address currency, uint256 price, uint96 royaltyPercentage) public payable {
+        require(msg.value >= fee, "too small fee");
         require(supportedCurrencies[currency], "not supported currency");
-        EventNFT newEvent = new EventNFT(msg.sender, eventName, eventSymbol, eventURI, ticketsTotal, currency, price);
+        EventNFT newEvent = new EventNFT(msg.sender, eventName, eventSymbol, eventURI, ticketsTotal, currency, price, royaltyPercentage);
         emit EventCreated(address(newEvent), eventURI);
     }
 

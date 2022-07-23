@@ -7,7 +7,7 @@ describe("EventManager", async () => {
 
     async function getCreatedEventAddress(transaction: ContractTransaction): Promise<string> {
         const receipt = await transaction.wait();
-        return  receipt.events?.filter((x) => {
+        return receipt.events?.filter((x) => {
             return x.event == "EventCreated"
         })[0].args?.[0];
     }
@@ -25,9 +25,8 @@ describe("EventManager", async () => {
             expect(await eventManagerContract.owner()).to.equal(owner.address);
         });
     });
-     describe("Event creation", async () => {
-         // TODO uncomment before final submission
-        /* it("Should revert if fee is too low", async () => {
+    describe("Event creation", async () => {
+        it("Should revert if fee is too low", async () => {
             // given
             const contract = await ethers.getContractFactory("EventManager");
             const eventManagerContract = await contract.deploy([]) as EventManager;
@@ -35,17 +34,17 @@ describe("EventManager", async () => {
             // then
             await expect(eventManagerContract.createEvent("some name", "EVNT", "someURI", 10, ethers.constants.AddressZero, 12, 1, {value: ethers.utils.parseEther("0.01")}))
                 .revertedWith("too small fee");
-        }); */
-         it("Should revert if not supported currency", async () => {
-             // given
-             const contract = await ethers.getContractFactory("EventManager");
-             const eventManagerContract = await contract.deploy([]) as EventManager;
-             const currency = await ethers.Wallet.createRandom().address;
+        });
+        it("Should revert if not supported currency", async () => {
+            // given
+            const contract = await ethers.getContractFactory("EventManager");
+            const eventManagerContract = await contract.deploy([]) as EventManager;
+            const currency = await ethers.Wallet.createRandom().address;
 
-             // then
-             await expect(eventManagerContract.createEvent("some name", "EVNT", "someURI", 10, currency, 12, 1, {value: ethers.utils.parseEther("0.1")}))
-                 .revertedWith("not supported currency");
-         });
+            // then
+            await expect(eventManagerContract.createEvent("some name", "EVNT", "someURI", 10, currency, 12, 1, {value: ethers.utils.parseEther("0.1")}))
+                .revertedWith("not supported currency");
+        });
         it("Should perform new event creation with native token as a currency and emit an event", async () => {
             // given
             const contract = await ethers.getContractFactory("EventManager");
@@ -75,37 +74,37 @@ describe("EventManager", async () => {
             expect(await eventContract.name()).to.be.equal(eventName);
             expect(await eventContract.symbol()).to.be.equal("EVNT");
         });
-         it("Should perform new event creation with non-native token as a currency and emit an event", async () => {
-             // given
-             const contract = await ethers.getContractFactory("EventManager");
-             const currency = await ethers.Wallet.createRandom().address;
-             const eventManagerContract = await contract.deploy([currency]) as EventManager;
-             const [requestor] = await ethers.getSigners();
+        it("Should perform new event creation with non-native token as a currency and emit an event", async () => {
+            // given
+            const contract = await ethers.getContractFactory("EventManager");
+            const currency = await ethers.Wallet.createRandom().address;
+            const eventManagerContract = await contract.deploy([currency]) as EventManager;
+            const [requestor] = await ethers.getSigners();
 
-             const eventName = "some name";
-             const eventSymbol = "EVNT";
-             const eventURI = "someURI";
-             const ticketsTotal = 100;
+            const eventName = "some name";
+            const eventSymbol = "EVNT";
+            const eventURI = "someURI";
+            const ticketsTotal = 100;
 
-             // when
-             const transaction = await eventManagerContract.createEvent(eventName, eventSymbol, eventURI, ticketsTotal, currency, 12, 1, {value: ethers.utils.parseEther("0.1")});
+            // when
+            const transaction = await eventManagerContract.createEvent(eventName, eventSymbol, eventURI, ticketsTotal, currency, 12, 1, {value: ethers.utils.parseEther("0.1")});
 
-             // then
-             const receipt = await transaction.wait();
-             const emittedEventCreatedParams = receipt.events?.filter((x) => {
-                 return x.event == "EventCreated"
-             })[0].args;
-             expect(emittedEventCreatedParams?.[1]).to.be.equal(eventURI);
+            // then
+            const receipt = await transaction.wait();
+            const emittedEventCreatedParams = receipt.events?.filter((x) => {
+                return x.event == "EventCreated"
+            })[0].args;
+            expect(emittedEventCreatedParams?.[1]).to.be.equal(eventURI);
 
-             const eventContract = await ethers.getContractAt("EventNFT", emittedEventCreatedParams?.[0]) as EventNFT;
-             expect(await eventContract.eventOwner()).to.be.equal(requestor.address);
-             expect(await eventContract.mintedCount()).to.be.equal(0);
-             expect(await eventContract.maxTokens()).to.be.equal(ticketsTotal);
-             expect(await eventContract.commonTokenURI()).to.be.equal(eventURI);
-             expect(await eventContract.name()).to.be.equal(eventName);
-             expect(await eventContract.symbol()).to.be.equal("EVNT");
-         });
-     });
+            const eventContract = await ethers.getContractAt("EventNFT", emittedEventCreatedParams?.[0]) as EventNFT;
+            expect(await eventContract.eventOwner()).to.be.equal(requestor.address);
+            expect(await eventContract.mintedCount()).to.be.equal(0);
+            expect(await eventContract.maxTokens()).to.be.equal(ticketsTotal);
+            expect(await eventContract.commonTokenURI()).to.be.equal(eventURI);
+            expect(await eventContract.name()).to.be.equal(eventName);
+            expect(await eventContract.symbol()).to.be.equal("EVNT");
+        });
+    });
     describe("Ticket buy", async () => {
         it("Should successfully buy a ticket with a native currency", async () => {
             // given
@@ -183,7 +182,6 @@ describe("EventManager", async () => {
             const ticketsTotal = 1;
             const transaction = await eventManagerContract.createEvent(eventName, eventSymbol, eventURI, ticketsTotal, simpleTokenContract.address, ethers.utils.parseEther("1"), 1, {value: ethers.utils.parseEther("0.1")});
             const eventAddress = await getCreatedEventAddress(transaction);
-            const eventContract = await ethers.getContractAt("EventNFT", eventAddress) as EventNFT;
 
             // then
             await simpleTokenContract.approve(eventManagerContract.address, ethers.utils.parseEther("0.5"))
@@ -209,6 +207,34 @@ describe("EventManager", async () => {
             await expect(eventManagerContract.buyTicket(eventAddress, {value: await eventContract.price()}))
                 .revertedWith("all tickets sold out");
         })
+    });
+    describe("Royalty", async () => {
+        it("Should set royalty information", async () => {
+            // given
+            const [requestor] = await ethers.getSigners();
+            const contract = await ethers.getContractFactory("EventManager");
+            const eventManagerContract = await contract.deploy([]) as EventManager;
+            const eventName = "some name";
+            const eventSymbol = "EVNT";
+            const eventURI = "someURI";
+            const ticketsTotal = 100;
+            const royalty = 2;
+
+            // when
+            const createEventTransaction = await eventManagerContract.createEvent(eventName, eventSymbol, eventURI, ticketsTotal, ethers.constants.AddressZero, 1, royalty, {value: ethers.utils.parseEther("0.1")});
+            const eventAddress = await getCreatedEventAddress(createEventTransaction);
+            const eventContract = await ethers.getContractAt("EventNFT", eventAddress) as EventNFT;
+            await eventManagerContract.buyTicket(eventAddress, {value: await eventContract.price()});
+
+            // then
+            const royaltyInfo1 = await eventContract.royaltyInfo(1, 100);
+            expect(royaltyInfo1[0]).to.be.equal(requestor.address);
+            expect(royaltyInfo1[1].toNumber()).to.be.equal(2);
+
+            const royaltyInfo2 = await eventContract.royaltyInfo(1, 500);
+            expect(royaltyInfo2[0]).to.be.equal(requestor.address);
+            expect(royaltyInfo2[1].toNumber()).to.be.equal(10);
+        });
     });
     describe("Claim QR", async () => {
         it("Should successfully burn NFT and claim QR code", async () => {
