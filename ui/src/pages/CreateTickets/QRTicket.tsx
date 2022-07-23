@@ -19,6 +19,9 @@ export const QRTicket = () => {
           height="auto"
           _hover={{ bg: "transparent" }}
           _active={{ bg: "transparent" }}
+          as="a"
+          target="_blank"
+          href="https://discord.gg/ethglobal-554623348622098432"
         >
           ETHGlobal Discord
         </Button>
