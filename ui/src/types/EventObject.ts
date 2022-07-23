@@ -8,14 +8,14 @@ type CommonEventObject = {
   endDate: string
   organiserEmail: string
   ticketCurrency: string
-  royaltyPercentage: number
+  royaltyPercentage: string
   distributePoaps: boolean
+  ticketPrice: string
+  ticketCount: string
 }
 
 export type EventObject = CommonEventObject & {
   symbol?: string
-  ticketCount: number
-  ticketPrice: number
 }
 
 export type EventListingObject = CommonEventObject & {
@@ -24,6 +24,9 @@ export type EventListingObject = CommonEventObject & {
   creatorAddress: string
   startDate: number
   endDate: number
-  ticketCount: number
-  ticketPrice: string
+}
+
+export type EventObjectForUpload = CommonEventObject & {
+  startDate: number
+  endDate: number
 }
