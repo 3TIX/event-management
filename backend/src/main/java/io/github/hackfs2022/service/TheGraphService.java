@@ -31,19 +31,9 @@ public class TheGraphService {
         query CreatedEvents($fromBlock: String!) {
           createdEvents(orderBy: blockNumber, where: {blockNumber_gt: $fromBlock}) {
             id
-            cid
-            creatorAddress
+            blockNumber
             name
-            description
-            isOnline
-            location
-            startDate
             endDate
-            organiserEmail
-            ticketCount
-            ticketPrice
-            ticketCurrency
-            royaltyPercentage
             distributePoaps
           }
         }""";
