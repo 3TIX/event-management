@@ -8,9 +8,9 @@ dataSources:
     name: EventManager
     network: mumbai
     source:
-      address: "0xede79B5A0B2d15E1a49bb78a09B719bBF37c451F"
+      address: "0x58C42734D8133EfE27D212F6b66613E42940C123"
       abi: EventManager
-      startBlock: 27275864
+      startBlock: 27298265
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5

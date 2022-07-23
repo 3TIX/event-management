@@ -24,13 +24,13 @@ export function handleEventCreated(event: EventCreated): void {
   entity.image = jsonData.get("image")!.toString();
   entity.isOnline = jsonData.get("isOnline")!.toBool();
   entity.location = jsonData.get("location")!.toString();
-  entity.startDate = parseInt(jsonData.get("startDate")!.toString()) as i32;
-  entity.endDate = parseInt(jsonData.get("endDate")!.toString()) as i32;
+  entity.startDate = jsonData.get("startDate")!.toU64() as i32;
+  entity.endDate = jsonData.get("endDate")!.toU64() as i32;
   entity.organiserEmail = jsonData.get("organiserEmail")!.toString();
-  entity.ticketCount = jsonData.get("ticketCount")!.toU64() as i32;
+  entity.ticketCount = jsonData.get("ticketCount")!.toString();
   entity.ticketPrice = jsonData.get("ticketPrice")!.toString();
   entity.ticketCurrency = Bytes.fromHexString(jsonData.get("ticketCurrency")!.toString());
-  entity.royaltyPercentage = jsonData.get("royaltyPercentage")!.toI64() as i32;
+  entity.royaltyPercentage = jsonData.get("royaltyPercentage")!.toString();
   entity.distributePoaps = jsonData.get("distributePoaps")!.toBool();
 
   entity.save();
