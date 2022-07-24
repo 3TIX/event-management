@@ -1,7 +1,7 @@
 <p align="center"><a target="_blank" href="https://hackfs2022.github.io/event-management/"><img src="logo.png" alt="3TIX" width="600"/></a></p>
 
 <p align="center">Application URL: https://hackfs2022.github.io/event-management/</p>
-<p align="center">Application URL: https://ethglobal.com/showcase/3tix-r2ivv/</p>
+<p align="center">HackFS 2022 showcase URL: https://ethglobal.com/showcase/3tix-r2ivv/</p>
 
 ##### Table of Contents
 - [Description](#description)
