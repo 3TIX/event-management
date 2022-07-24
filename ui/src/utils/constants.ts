@@ -2,7 +2,7 @@ export const NATIVE_CURRENCY = "0x0000000000000000000000000000000000000000"
 
 export const COVALENT_NFT_URL =
   "https://api.covalenthq.com/v1/80001/address/{walletAddress}/balances_v2/?quote-currency=USD&format=JSON&nft=true&no-nft-fetch=false&key={token}"
-export const BACKEND_URL = "http://34.136.84.119:8080/qr-code/claim"
+export const BACKEND_URL = "https://hackfs.ulad.dev/qr-code/claim"
 
 export const COVALENT_TOKEN = "ckey_5c86efc78a4c45d5b7a46805e4b"
 
