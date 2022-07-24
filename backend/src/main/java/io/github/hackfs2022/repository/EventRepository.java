@@ -35,6 +35,17 @@ public class EventRepository {
         return fromRecord(result);
     }
 
+    public Event getByAddress(String address) {
+        final var result = db.selectFrom(EVENTS)
+            .where(EVENTS.ADDRESS.equal(address))
+            .fetchOne();
+        if (result == null) {
+            throw new IllegalArgumentException(String.format("Event with address=%s is not found", address));
+        }
+
+        return fromRecord(result);
+    }
+
     public Optional<Integer> getLastProcessedBlock() {
         final var maxBlockNumber = max(EVENTS.BLOCK_NUMBER);
         final var result = db.select(maxBlockNumber)

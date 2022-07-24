@@ -53,7 +53,7 @@ public class HackFsApp {
         final var mailService = new MailService(getFromEnv("HACK_FS_EMAIL_USERNAME"), getFromEnv("HACK_FS_EMAIL_PASSWORD"));
 
         final var serviceManager = new ServiceManager(List.of(
-            new QrCodeTicketDistributionJob(qrCodeTicketRepository, theGraphService, qrCodeGenerator, mailService),
+            new QrCodeTicketDistributionJob(qrCodeTicketRepository, theGraphService, qrCodeGenerator, mailService, eventRepository),
             new EventCreationJob(eventRepository, theGraphService)
         ));
         getRuntime().addShutdownHook(new Thread(serviceManager::stopAsync));

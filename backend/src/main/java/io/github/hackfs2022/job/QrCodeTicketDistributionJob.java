@@ -2,6 +2,7 @@ package io.github.hackfs2022.job;
 
 import com.google.common.util.concurrent.AbstractScheduledService;
 import io.github.hackfs2022.model.QrCodeTicket;
+import io.github.hackfs2022.repository.EventRepository;
 import io.github.hackfs2022.repository.QrCodeTicketRepository;
 import io.github.hackfs2022.service.MailService;
 import io.github.hackfs2022.service.QrCodeGenerator;
@@ -29,15 +30,18 @@ public class QrCodeTicketDistributionJob extends AbstractScheduledService {
     private final TheGraphService theGraphService;
     private final QrCodeGenerator qrCodeGenerator;
     private final MailService mailService;
+    private final EventRepository eventRepository;
 
     public QrCodeTicketDistributionJob(QrCodeTicketRepository qrCodeTicketRepository,
                                        TheGraphService theGraphService,
                                        QrCodeGenerator qrCodeGenerator,
-                                       MailService mailService) {
+                                       MailService mailService,
+                                       EventRepository eventRepository) {
         this.qrCodeTicketRepository = qrCodeTicketRepository;
         this.theGraphService = theGraphService;
         this.qrCodeGenerator = qrCodeGenerator;
         this.mailService = mailService;
+        this.eventRepository = eventRepository;
     }
 
     @Override
@@ -77,7 +81,9 @@ public class QrCodeTicketDistributionJob extends AbstractScheduledService {
             fileOutputStream.write(qrCode);
             fileOutputStream.close();
 
-            mailService.sendMessage(ticket.email, "Your ticket", tempFile);
+            final var event = eventRepository.getByAddress(ticket.contractAddress.orElseThrow());
+
+            mailService.sendMessage(ticket.email, "Your ticket to " + event.name, tempFile);
             qrCodeTicketRepository.update(ticket.qrCodeSent());
 
             tempFile.delete();
