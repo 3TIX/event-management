@@ -15,4 +15,4 @@ export const CURRENCIES: Record<string, string> = {
 }
 
 export const EVENT_MANAGER_ADDRESS =
-  "0x4F7C4B3d3938c244ABA6e61E2a7dfAAA9E919e4C"
+  "0x16A51748274Cd17fe9De674e44654ff68EFD3936"
