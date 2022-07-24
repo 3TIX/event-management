@@ -1,7 +1,9 @@
 package io.github.hackfs2022.job;
 
 import com.google.common.util.concurrent.AbstractScheduledService;
+import io.github.hackfs2022.model.Event;
 import io.github.hackfs2022.repository.EventRepository;
+import io.github.hackfs2022.service.PoapService;
 import io.github.hackfs2022.service.TheGraphService;
 import io.github.hackfs2022.service.TheGraphService.CreatedEventInfo;
 import org.slf4j.Logger;
@@ -23,10 +25,12 @@ public class EventCreationJob extends AbstractScheduledService {
 
     private final EventRepository eventRepository;
     private final TheGraphService theGraphService;
+    private final PoapService poapService;
 
-    public EventCreationJob(EventRepository eventRepository, TheGraphService theGraphService) {
+    public EventCreationJob(EventRepository eventRepository, TheGraphService theGraphService, PoapService poapService) {
         this.eventRepository = eventRepository;
         this.theGraphService = theGraphService;
+        this.poapService = poapService;
     }
 
     @Override
@@ -35,6 +39,9 @@ public class EventCreationJob extends AbstractScheduledService {
         final var lastProcessedBlock = eventRepository.getLastProcessedBlock().orElse(0);
         theGraphService.getEvents(lastProcessedBlock)
             .forEach(this::createEvent);
+
+        eventRepository.findAll(CREATED)
+            .forEach(this::createPoapEvent);
 
         LOG.info("EventCreationJob successfully finished");
     }
@@ -48,6 +55,11 @@ public class EventCreationJob extends AbstractScheduledService {
             .endDate(Instant.ofEpochSecond(parseInt(event.endDate())))
             .distributePoaps(event.distributePoaps())
             .build());
+    }
+
+    private void createPoapEvent(Event event) {
+        poapService.createEvent(theGraphService.getEvent(event.address));
+        eventRepository.update(event.poapRequested());
     }
 
     @Override

@@ -4,6 +4,8 @@ import java.time.Instant;
 import java.util.Objects;
 import java.util.UUID;
 
+import static io.github.hackfs2022.model.Event.Builder.event;
+import static io.github.hackfs2022.model.Event.State.POAPS_REQUESTED;
 import static java.time.Clock.systemUTC;
 import static java.time.Instant.now;
 import static java.util.UUID.randomUUID;
@@ -30,6 +32,25 @@ public class Event {
         this.name = builder.name;
         this.endDate = builder.endDate;
         this.distributePoaps = builder.distributePoaps;
+    }
+
+    private Event.Builder copy() {
+        return event()
+            .id(id)
+            .createdDate(createdDate)
+            .updatedDate(updatedDate)
+            .state(state)
+            .blockNumber(blockNumber)
+            .address(address)
+            .name(name)
+            .endDate(endDate)
+            .distributePoaps(distributePoaps);
+    }
+
+    public Event poapRequested() {
+        return copy()
+            .state(POAPS_REQUESTED)
+            .build();
     }
 
     public enum State {

@@ -28,6 +28,14 @@ public final class Json {
         }
     }
 
+    public static <T> T parse(JsonNode json, Class<T> type) {
+        try {
+            return OBJECT_MAPPER.treeToValue(json, type);
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+
     public static String toJsonString(Object element) {
         try {
             return OBJECT_MAPPER.writeValueAsString(element);

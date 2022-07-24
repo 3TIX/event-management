@@ -31,10 +31,21 @@ public class TheGraphService {
         query CreatedEvents($fromBlock: String!) {
           createdEvents(orderBy: blockNumber, where: {blockNumber_gt: $fromBlock}) {
             id
+            blockNumber
+            name
+            endDate
+            distributePoaps
+          }
+        }""";
+    private static final String EVENT_BY_ID_QUERY = """
+        query EventById($id: String!) {
+          createdEvents(where: {id: $id}) {
+            id
             cid
             creatorAddress
             name
             description
+            image
             isOnline
             location
             startDate
@@ -99,5 +110,41 @@ public class TheGraphService {
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public FullEvent getEvent(String address) {
+        final var jsonNode = object()
+            .put("query", EVENT_BY_ID_QUERY)
+            .set("variables", object()
+                .put("id", address));
+
+        final var request = HttpRequest.newBuilder(API_URI)
+            .POST(BodyPublishers.ofString(jsonNode.toString()))
+            .build();
+        final var response = sendRequest(request)
+            .get("data")
+            .get("createdEvents");
+        return Json.parse(response, FullEvent.class);
+    }
+
+    public record FullEvent(
+        String id,
+        String cid,
+        String creatorAddress,
+        String name,
+        String description,
+        String image,
+        boolean isOnline,
+        String location,
+        int startDate,
+        int endDate,
+        String organiserEmail,
+        String ticketCount,
+        String ticketPrice,
+        String ticketCurrency,
+        String royaltyPercentage,
+        String distributePoaps
+    ) {
+
     }
 }

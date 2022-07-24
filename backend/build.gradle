@@ -36,6 +36,9 @@ dependencies {
     implementation "com.google.zxing:javase:$googleZxingVersion"
     implementation "javax.mail:mail:$javaMailVersion"
 
+    implementation "org.apache.httpcomponents:httpclient:$apacheHttpClientVersion"
+    implementation "org.apache.httpcomponents:httpmime:$apacheHttpClientVersion"
+
     testImplementation "org.assertj:assertj-core:$assertjVersion"
 
     testImplementation "org.junit.jupiter:junit-jupiter-api:$junitVersion"

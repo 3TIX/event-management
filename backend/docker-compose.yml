@@ -21,3 +21,4 @@ services:
       HACK_FS_DATABASE_PASSWORD: "hack_fs_app_password"
       HACK_FS_EMAIL_USERNAME: ""
       HACK_FS_EMAIL_PASSWORD: ""
+      HACK_FS_POAP_API_KEY: ""
