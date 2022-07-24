@@ -42,7 +42,8 @@ export const NFTModal = ({ isOpen, onClose }: NFTModalProps) => {
   const { account } = useContext(Web3Context)
   const { data: nftData } = useSWR<NFTResponse>(
     [NFT_TOKENS_QUERY, account],
-    fetchTokens
+    fetchTokens,
+    { refreshInterval: 5000 }
   )
   const [claimedNFT, setClaimedNFT] = useState<RenedrableToken | null>(null)
   const onClaimClick = useCallback(
@@ -105,7 +106,15 @@ export const NFTModal = ({ isOpen, onClose }: NFTModalProps) => {
                     {tokens.map((token) => {
                       return (
                         <Tr key={token.tokenId}>
-                          <Td>{token.contractName}</Td>
+                          <Td
+                            overflow="hidden"
+                            textOverflow="ellipsis"
+                            whiteSpace="nowrap"
+                            maxWidth={0}
+                            title={token.contractName}
+                          >
+                            {token.contractName}
+                          </Td>
                           <Td>{token.tokenId}</Td>
                           <Td>
                             <Button

@@ -92,23 +92,23 @@ export const EventCreateMaster = ({
 
   const onNextClick = useCallback(() => {
     if (stepIndex === Steps.length - 1) {
-      onClose()
+      onWizardClose()
     } else {
       setStepIndex((currentIndex) => {
         return currentIndex + 1
       })
     }
-  }, [onClose, stepIndex])
+  }, [onWizardClose, stepIndex])
 
   const onBackClick = useCallback(() => {
     if (stepIndex === 0) {
-      onClose()
+      onWizardClose()
     } else {
       setStepIndex((currentIndex) => {
         return currentIndex - 1
       })
     }
-  }, [onClose, stepIndex])
+  }, [onWizardClose, stepIndex])
 
   return (
     <Modal isOpen={isOpen} onClose={onWizardClose} isCentered>

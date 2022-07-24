@@ -59,6 +59,7 @@ export const MainInfo = ({ onNextClick, state, dispatch }: StepProps) => {
           <Input
             isRequired
             type="number"
+            step={1}
             name="ticketCount"
             value={state.ticketCount}
             onChange={handleChange}
@@ -111,6 +112,7 @@ export const MainInfo = ({ onNextClick, state, dispatch }: StepProps) => {
             onChange={handleChange}
             variant="unstyled"
             type="number"
+            step={1}
             max={100}
             min={0}
           />
